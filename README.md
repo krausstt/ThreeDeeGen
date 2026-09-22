@@ -7,7 +7,7 @@ Parametrische und generative 3D-Druck-Modelle als Code. Jede Druckdatei wird aus
 | Projekt | Beschreibung | Material | Status |
 |---|---|---|---|
 | [mae-west-eiffel](projects/mae-west-eiffel/) | Generative Fusion aus Mae West (München) und Eiffelturm, 180 mm | PLA | fertig, ungedruckt |
-| [bike-bell-bayonet](projects/bike-bell-bayonet/) | Bajonett-Aufnahme + Lenkerband für Decathlon-Fahrradklingel | TPU bzw. PETG + TPU | Entwurf, axiale Maße offen |
+| [bike-bell-bayonet](projects/bike-bell-bayonet/) | Bajonett-Aufnahme + Lenkerband für Decathlon-Fahrradklingel, Lenker 31–39 mm | PETG + TPU (oder TPU) | Entwurf v2, Klemmmaß per Prüfstück klären |
 
 ## Schnellstart
 
