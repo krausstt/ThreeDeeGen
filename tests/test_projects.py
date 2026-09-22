@@ -20,8 +20,11 @@ def test_bike_bell_bayonet(tmp_path):
     for strap in ("integrated", "separate"):
         s = g.generate(g.Params(strap=strap), tmp_path, previews=False)
         assert s["functional_test"]["ok"]
-        for rep in s["parts"].values():
-            assert rep["watertight"] and rep["bodies"] == 1
+        for name, rep in s["parts"].items():
+            assert rep["watertight"]
+            assert rep["bodies"] == (3 if name == "fit_coupons" else 1)
+        ft = s["functional_test"]
+        assert ft["bar_min_vs_mount_mm3"] < 1.0 and ft["bar_max_vs_mount_mm3"] < 1.0
 
 
 def test_mae_west_eiffel_coarse(tmp_path):

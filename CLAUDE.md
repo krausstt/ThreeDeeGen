@@ -20,7 +20,7 @@ Repo für parametrische/generative 3D-Druck-Modelle. Jedes Modell ist Code, die 
 
 ## Vor jedem Commit
 ```bash
-ruff check . && python3 -m pytest -q
+ruff check . && python3 -m pytest -q   # Exit-Code prüfen, nicht durch | tail maskieren
 ```
 
 ## Kommunikation (Nutzerpräferenzen)
