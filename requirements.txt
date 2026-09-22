@@ -6,3 +6,5 @@ numba>=0.60
 lxml>=5.0
 matplotlib>=3.9
 fast-simplification>=0.1
+ruff>=0.6
+pytest>=8.0

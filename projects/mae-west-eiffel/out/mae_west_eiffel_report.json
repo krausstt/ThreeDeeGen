@@ -8,10 +8,12 @@
     83.24,
     180.01
   ],
-  "volume_cm3": 27.39,
-  "pla_mass_g_at_100pct": 34.0,
+  "volume_cm3": 27.395,
+  "material": "PLA",
+  "mass_g_at_100pct": 34.0,
   "overhang_area_gt45deg_pct": 0.279,
   "overhang_area_gt60deg_pct": 0.103,
+  "overhang_area_gt45deg_mm2": 101.4,
   "min_strut_angle_deg": 50.0,
   "worst_struts": {
     "spoke_hi0": 50.0,

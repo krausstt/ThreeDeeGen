@@ -1,0 +1,16 @@
+[project]
+name = "threedeegen"
+version = "0.1.0"
+description = "Parametric / generative 3D-print models (SDF + CSG) with automatic printability checks"
+requires-python = ">=3.10"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["projects/*/out"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E741"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

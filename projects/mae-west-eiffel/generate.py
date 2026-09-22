@@ -36,13 +36,17 @@ Print awareness (FDM, 0.4 mm nozzle, upright, no supports)
 """
 from __future__ import annotations
 
-import argparse
-import json
 import math
-import time
+import sys
 from dataclasses import dataclass, asdict
+from pathlib import Path
 
 import numpy as np
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parents[1]))
+from tdg import check, cli, mesh, render, sdf  # noqa: E402
+from tdg.sdf import Rod  # noqa: E402
 
 
 # --------------------------------------------------------------------------- params
@@ -108,15 +112,6 @@ def smoothstep(x):
 
 
 # --------------------------------------------------------------------------- primitives
-class Rod:
-    """Polyline with per-vertex radius (union of round cones)."""
-
-    def __init__(self, pts, rad, name):
-        self.p = np.asarray(pts, float)
-        self.r = np.broadcast_to(np.asarray(rad, float), (len(self.p),)).copy()
-        self.name = name
-
-
 class DiamondRing:
     """Torus with rhombic cross-section: |rho-R|/w + |z-z0|/h <= 1."""
 
@@ -260,171 +255,43 @@ def strut_angles(rods):
     return out
 
 
-# --------------------------------------------------------------------------- SDF
-def _rod_kernel():
-    from numba import njit
-
-    @njit(cache=True, fastmath=True)
-    def splat(S, buf, lo, h, A, Bv, ra, rb, band, k):
-        nx, ny, nz = S.shape
-        m = A.shape[0]
-        # pass 1: hard min of this rod into buf (inf = untouched)
-        for q in range(m):
-            rmax = max(ra[q], rb[q]) + band
-            i0 = max(int((min(A[q, 0], Bv[q, 0]) - rmax - lo[0]) / h), 0)
-            i1 = min(int((max(A[q, 0], Bv[q, 0]) + rmax - lo[0]) / h) + 1, nx - 1)
-            j0 = max(int((min(A[q, 1], Bv[q, 1]) - rmax - lo[1]) / h), 0)
-            j1 = min(int((max(A[q, 1], Bv[q, 1]) + rmax - lo[1]) / h) + 1, ny - 1)
-            l0 = max(int((min(A[q, 2], Bv[q, 2]) - rmax - lo[2]) / h), 0)
-            l1 = min(int((max(A[q, 2], Bv[q, 2]) + rmax - lo[2]) / h) + 1, nz - 1)
-            abx = Bv[q, 0] - A[q, 0]
-            aby = Bv[q, 1] - A[q, 1]
-            abz = Bv[q, 2] - A[q, 2]
-            L2 = abx * abx + aby * aby + abz * abz + 1e-12
-            for i in range(i0, i1 + 1):
-                px = lo[0] + i * h - A[q, 0]
-                for j in range(j0, j1 + 1):
-                    py = lo[1] + j * h - A[q, 1]
-                    for l in range(l0, l1 + 1):
-                        pz = lo[2] + l * h - A[q, 2]
-                        t = (px * abx + py * aby + pz * abz) / L2
-                        t = min(max(t, 0.0), 1.0)
-                        dx = px - t * abx
-                        dy = py - t * aby
-                        dz = pz - t * abz
-                        d = np.sqrt(dx * dx + dy * dy + dz * dz) - (ra[q] + t * (rb[q] - ra[q]))
-                        if d < band and d < buf[i, j, l]:
-                            buf[i, j, l] = d
-        # pass 2: exponential smooth-union into S, reset buf
-        for q in range(m):
-            rmax = max(ra[q], rb[q]) + band
-            i0 = max(int((min(A[q, 0], Bv[q, 0]) - rmax - lo[0]) / h), 0)
-            i1 = min(int((max(A[q, 0], Bv[q, 0]) + rmax - lo[0]) / h) + 1, nx - 1)
-            j0 = max(int((min(A[q, 1], Bv[q, 1]) - rmax - lo[1]) / h), 0)
-            j1 = min(int((max(A[q, 1], Bv[q, 1]) + rmax - lo[1]) / h) + 1, ny - 1)
-            l0 = max(int((min(A[q, 2], Bv[q, 2]) - rmax - lo[2]) / h), 0)
-            l1 = min(int((max(A[q, 2], Bv[q, 2]) + rmax - lo[2]) / h) + 1, nz - 1)
-            for i in range(i0, i1 + 1):
-                for j in range(j0, j1 + 1):
-                    for l in range(l0, l1 + 1):
-                        d = buf[i, j, l]
-                        if d < 1e20:
-                            S[i, j, l] += np.exp(-max(d, -20.0 * k) / k)
-                            buf[i, j, l] = np.inf
-
-    return splat
-
-
-def evaluate(rods, solids, p: Params):
-    k = p.blend
-    band = 7 * k + 0.5
-    lo = np.array([-p.r_base - 9, -p.r_base - 9, -1.0 - 0.3 * p.voxel])  # no sample on z=0
-    hi = np.array([p.r_base + 9, p.r_base + 9, p.height + 1.0])
-    n = np.ceil((hi - lo) / p.voxel).astype(int) + 1
-    S = np.zeros(n, np.float32)
-    buf = np.full(n, np.inf, np.float32)
-    ax = [lo[i] + p.voxel * np.arange(n[i]) for i in range(3)]
-    splat = _rod_kernel()
-    t0 = time.time()
-    for rd in rods:
-        splat(S, buf, lo, p.voxel, rd.p[:-1].copy(), rd.p[1:].copy(),
-              rd.r[:-1].copy(), rd.r[1:].copy(), band, k)
-    del buf
-    for so in solids:
-        bmin, bmax = so.bbox()
-        a = np.clip(np.floor((bmin - band - lo) / p.voxel).astype(int), 0, n - 1)
-        b = np.clip(np.ceil((bmax + band - lo) / p.voxel).astype(int) + 1, 0, n)
-        X, Y, Z = np.meshgrid(ax[0][a[0]:b[0]], ax[1][a[1]:b[1]], ax[2][a[2]:b[2]], indexing="ij")
-        d = so.sdf(X, Y, Z)
-        sub = S[a[0]:b[0], a[1]:b[1], a[2]:b[2]]
-        sub += np.where(d < band, np.exp(-np.maximum(d, -20 * k) / k), 0).astype(np.float32)
-    print(f"  SDF accumulated in {time.time() - t0:.1f}s, grid {tuple(int(x) for x in n)}")
-    with np.errstate(divide="ignore"):
-        D = (-k * np.log(np.maximum(S, 1e-30))).astype(np.float32)
-    del S
-    Z = ax[2][None, None, :]
-    np.maximum(D, (-Z).astype(np.float32), out=D)   # flat cut at the bed, z >= 0
-    return D, lo
-
-
-def mesh_from_sdf(D, lo, p: Params):
-    from skimage.measure import marching_cubes
-    import trimesh
-    v, f, _, _ = marching_cubes(D, 0.0, spacing=(p.voxel,) * 3, allow_degenerate=False)
-    v += lo
-    m = trimesh.Trimesh(v, f[:, ::-1], process=True)
-    if m.volume < 0:
-        m.invert()
-    m.apply_translation([0, 0, -m.bounds[0, 2]])   # sit exactly on the bed
-    return m
-
-
-def report(m, rods, meta, p: Params):
-    import trimesh
-    comps = m.split(only_watertight=False)
-    n = m.face_normals
-    zc = m.triangles_center[:, 2]
-    area = m.area_faces
-    down = (n[:, 2] < -math.cos(math.radians(45))) & (zc > 0.3)
-    down60 = (n[:, 2] < -math.cos(math.radians(30))) & (zc > 0.3)
-    ang = strut_angles(rods)
-    worst = sorted(ang.items(), key=lambda x: x[1])[:5]
-    r = dict(
-        watertight=bool(m.is_watertight),
-        winding_consistent=bool(m.is_winding_consistent),
-        bodies=len(comps),
-        faces=int(len(m.faces)),
-        bbox_mm=[round(float(x), 2) for x in m.extents],
-        volume_cm3=round(float(m.volume) / 1000, 2),
-        pla_mass_g_at_100pct=round(float(m.volume) / 1000 * 1.24, 1),
-        overhang_area_gt45deg_pct=round(100 * float(area[down].sum() / area.sum()), 3),
-        overhang_area_gt60deg_pct=round(100 * float(area[down60].sum() / area.sum()), 3),
-        min_strut_angle_deg=round(worst[0][1], 1),
-        worst_struts={k: round(v, 1) for k, v in worst},
-        rod_diameter_mm=[p.d_rod_top, p.d_rod_base],
-        **{k: round(float(v), 2) for k, v in meta.items()},
-    )
-    return r
-
-
-def main():
-    ap = argparse.ArgumentParser()
-    for f, v in asdict(P).items():
-        ap.add_argument("--" + f.replace("_", "-"), type=type(v), default=v)
-    ap.add_argument("--out", default="out/mae_west_eiffel")
-    ap.add_argument("--simplify-eps", type=float, default=0.02)
-    a = ap.parse_args()
-    p = Params(**{f: getattr(a, f) for f in asdict(P)})
-    import os
-    os.makedirs(os.path.dirname(a.out) or ".", exist_ok=True)
-
+# --------------------------------------------------------------------------- pipeline
+def generate(p: Params, out: Path, simplify_eps=0.02, previews=True):
     print("building primitives ...")
     rods, solids, meta = build(p)
     ang = strut_angles(rods)
     print(f"  {len(rods)} rods, {len(solids)} solids, min strut angle {min(ang.values()):.1f} deg")
     print("evaluating SDF ...")
-    D, lo = evaluate(rods, solids, p)
+    lo = [-p.r_base - 9, -p.r_base - 9, -1.0 - 0.3 * p.voxel]   # no sample on z=0
+    hi = [p.r_base + 9, p.r_base + 9, p.height + 1.0]
+    D, lo = sdf.evaluate(rods, solids, lo, hi, p.voxel, p.blend)
     print("marching cubes ...")
-    m = mesh_from_sdf(D, lo, p)
+    m = sdf.to_mesh(D, lo, p.voxel)
     del D
     print(f"  raw mesh {len(m.faces)} faces")
-    if a.simplify_eps > 0:
-        # manifold-preserving decimation (max deviation simplify_eps mm)
-        import manifold3d as m3
-        import trimesh
-        M = m3.Manifold(m3.Mesh(vert_properties=np.asarray(m.vertices, np.float32),
-                                tri_verts=np.asarray(m.faces, np.uint32)))
-        mm = M.simplify(a.simplify_eps).to_mesh()
-        m = trimesh.Trimesh(mm.vert_properties[:, :3], mm.tri_verts, process=True)
-        print(f"  simplified to {len(m.faces)} faces (eps {a.simplify_eps} mm)")
-    rep = report(m, rods, meta, p)
-    rep["params"] = asdict(p)
-    m.export(a.out + ".stl")
-    m.export(a.out + ".3mf")
-    with open(a.out + "_report.json", "w") as fh:
-        json.dump(rep, fh, indent=2)
-    print(json.dumps({k: v for k, v in rep.items() if k != "params"}, indent=2))
-    assert rep["watertight"] and rep["bodies"] == 1, "mesh is not a single watertight body"
+    m = mesh.simplify(m, simplify_eps)
+    print(f"  simplified to {len(m.faces)} faces (eps {simplify_eps} mm)")
+    worst = sorted(ang.items(), key=lambda x: x[1])[:5]
+    rep = check.report(m, "PLA", extra=dict(
+        min_strut_angle_deg=round(worst[0][1], 1),
+        worst_struts={k: round(v, 1) for k, v in worst},
+        rod_diameter_mm=[p.d_rod_top, p.d_rod_base],
+        **{k: round(float(v), 2) for k, v in meta.items()},
+        params=asdict(p)))
+    mesh.export(m, str(out))
+    check.write(rep, str(out) + "_report.json")
+    if previews:
+        render.main(str(out) + ".stl", str(out))
+    print({k: v for k, v in rep.items() if k != "params"})
+    check.assert_printable(rep)
+    return m, rep
+
+
+def main():
+    ap = cli.parser_for(Params, out=(str, str(HERE / "out" / "mae_west_eiffel")),
+                        simplify_eps=(float, 0.02))
+    a = ap.parse_args()
+    generate(cli.params_from(a, Params), Path(a.out), a.simplify_eps)
 
 
 if __name__ == "__main__":
