@@ -1,0 +1,53 @@
+{
+  "watertight": true,
+  "winding_consistent": true,
+  "bodies": 1,
+  "faces": 657842,
+  "bbox_mm": [
+    83.24,
+    83.24,
+    180.01
+  ],
+  "volume_cm3": 27.39,
+  "pla_mass_g_at_100pct": 34.0,
+  "overhang_area_gt45deg_pct": 0.279,
+  "overhang_area_gt60deg_pct": 0.103,
+  "min_strut_angle_deg": 50.0,
+  "worst_struts": {
+    "spoke_hi0": 50.0,
+    "spoke_hi1": 50.0,
+    "spoke_hi2": 50.0,
+    "spoke_hi3": 50.0,
+    "arch0a": 50.0
+  },
+  "rod_diameter_mm": [
+    2.0,
+    3.0
+  ],
+  "z_crown": 151.2,
+  "z_waist": 93.74,
+  "r_crown": 24.4,
+  "z_leg": 54.43,
+  "z_arch_apex": 51.91,
+  "z_platform2": 72.83,
+  "z_lantern": 164.16,
+  "z_mast0": 113.74,
+  "z_spoke_hi": 122.12,
+  "params": {
+    "height": 180.0,
+    "r_base": 40.0,
+    "r_waist": 14.0,
+    "waist_frac": 0.62,
+    "crown_frac": 0.84,
+    "crown_ratio": 0.61,
+    "twist_deg": 143.0,
+    "n_rods": 16,
+    "leg_frac": 0.36,
+    "leg_gather": 0.14,
+    "d_rod_top": 2.0,
+    "d_rod_base": 3.0,
+    "blend": 0.35,
+    "min_angle": 50.0,
+    "voxel": 0.25
+  }
+}

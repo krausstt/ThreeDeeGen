@@ -1,0 +1,8 @@
+numpy>=2.0
+scikit-image>=0.24
+trimesh>=4.0
+manifold3d>=3.0
+numba>=0.60
+lxml>=5.0
+matplotlib>=3.9
+fast-simplification>=0.1
