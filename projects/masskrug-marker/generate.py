@@ -37,12 +37,14 @@ YIELD_STRAIN = {"PLA": 0.02, "PETG": 0.025}   # rough bulk values; printed parts
 @dataclass
 class Params:
     # --- measured (caliper photos 03 / 04)
-    bar_w: float = 21.9           # handle width across the loop plane
-    bar_t: float = 13.6           # handle thickness in the loop plane
-    # --- ASSUMED (check with the profile gauge)
-    profile_n: float = 2.5        # superellipse exponent of the cross-section (2 = ellipse)
+    # caliper 21.9 x 13.6; profile gauge n=2.0 fitted but "close call" -> +1 mm on
+    # both diameters as requested by the user (photo 05)
+    bar_w: float = 22.9           # handle width across the loop plane
+    bar_t: float = 14.6           # handle thickness in the loop plane
+    # --- verified with the profile gauge (notch 1 = ellipse)
+    profile_n: float = 2.0        # superellipse exponent of the cross-section (2 = ellipse)
     # --- clip
-    grip: float = 0.3             # inner contour this much smaller than the bar -> preload
+    grip: float = 0.4             # inner contour this much smaller than the bar -> preload
     band_t: float = 2.0           # wall thickness (5 lines @ 0.4 mm)
     clip_w: float = 10.0          # length along the bar
     gap_ratio: float = 0.72       # opening chord / bar_t (retention vs. snap force)
@@ -56,7 +58,7 @@ class Params:
     symbol_depth: float = 0.8
     # --- print
     material: str = "PETG"        # PETG: dishwasher/sun safer than PLA (Tg ~80 vs ~60 deg C)
-    fit_grips: str = "0.0,0.3,0.6"
+    fit_grips: str = "0.2,0.4,0.6"
     gauge_ns: str = "2.0,2.5,3.0"
 
 

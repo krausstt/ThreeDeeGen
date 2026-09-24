@@ -1,6 +1,6 @@
 # Bajonett-Aufnahme für Decathlon-Fahrradklingel
 
-Status: **Entwurf v2, Klemmmaß noch unsicher.** Zuerst die 3 Prüfstücke drucken, dann die Aufnahme.
+Status: **final v2.** Klemmmaß mit Prüfstücken bestätigt: 3,0 mm sitzt gut, 3,4 mm sitzt bombenfest. Verbaut ist 3,4 mm. Die Aufnahme selbst ist noch ungedruckt.
 
 ![Übersicht](out/overview_v2.png)
 
@@ -52,11 +52,11 @@ Jede Variante enthält:
 | Stiftbreite / Spannweite | 3,1 / 11,9 mm | gemessen |
 | Stiftdicke axial | 3,0 mm | Angabe „ca. 3 mm“, Foto 07 zeigt eher ≈ 2,5 mm. Mit 3,0 ist die Tasche eher zu groß, das ist unkritisch. |
 | Nocken | 2,9 mm, Innenabstand 11,0 mm, 1 mm Überstand | gemessen und bestätigt |
-| Auflage bis Unterkante Stifte (`clamp_gap`) | **3,4 mm (unsicher)** | siehe unten |
+| Auflage bis Unterkante Stifte (`clamp_gap`) | **3,4 mm** | per Prüfstück bestätigt (2 Kerben = bombenfest) |
 | Mittelnoppe über den Stiften | 1,2 mm | aus Gesamthöhe „etwas über 6 mm“ und Foto 06 |
 | Lenker inkl. Kabel | 31–39 mm | gemessen |
 
-**Widerspruch beim Klemmmaß:** Auflage bis Stifte „etwas weniger als 4 mm“ (≈ 3,8) plus Stiftdicke ≈ 3 mm ergibt 6,8 mm. Das ist mehr als die angegebene Gesamthöhe von „etwas über 6 mm“, obwohl die Mittelnoppe darin noch gar nicht enthalten ist. Foto 07 deutet eher auf ≈ 3,0 mm hin. Deshalb gibt es 3 Prüfstücke:
+**Herleitung des Klemmmaßes:** Auflage bis Stifte „etwas weniger als 4 mm“ (≈ 3,8) plus Stiftdicke ≈ 3 mm ergibt 6,8 mm. Das ist mehr als die angegebene Gesamthöhe von „etwas über 6 mm“, obwohl die Mittelnoppe darin noch gar nicht enthalten ist. Foto 07 deutet eher auf ≈ 3,0 mm hin. Deshalb gibt es 3 Prüfstücke:
 
 | Prüfstück | Kerben am Rand | `clamp_gap` | Plattendicke |
 |---|---|---|---|
@@ -64,7 +64,7 @@ Jede Variante enthält:
 | 2 | 2 | 3,4 mm | 3,2 mm |
 | 3 | 3 | 3,8 mm | 3,6 mm |
 
-Richtig ist das dickste Prüfstück, bei dem sich die Klingel noch ganz eindrehen lässt und hörbar einrastet. Danach neu generieren:
+Ergebnis: Prüfstück 1 sitzt gut, Prüfstück 2 sitzt bombenfest, also wird 3,4 mm verbaut, damit bei Vibration nichts klappert. Lässt sich die fertige Aufnahme zu schwer eindrehen, mit 3,2 oder 3,0 neu erzeugen:
 
 ```bash
 python3 projects/bike-bell-bayonet/generate.py --strap separate --clamp-gap <Wert> \
@@ -84,7 +84,7 @@ python3 projects/bike-bell-bayonet/generate.py --strap separate --clamp-gap <Wer
 
 ## Offene Punkte
 
-1. **Klemmmaß:** Welches Prüfstück passt?
+1. **Klemmmaß:** erledigt, 3,4 mm.
 2. **Ausrichtung:** Wohin soll der Klingelhebel im eingerasteten Zustand zeigen? Aktuell liegen die Stifte eingerastet parallel zum Lenker, gedreht wird gegen den Uhrzeigersinn von der Klingel aus gesehen. Umkehren mit `--lock-ccw false`.
 3. **Verdrehen um den Lenker:** Die harte V-Auflage berührt den Lenker nur auf zwei Linien. Rutscht die Aufnahme um den Lenker, wäre eine dünne TPU-Zwischenlage die nächste Ausbaustufe (noch nicht umgesetzt).
 

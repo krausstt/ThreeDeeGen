@@ -1,6 +1,6 @@
 # Maßkrug-Markierclips
 
-Status: **Entwurf, ungedruckt.** Die Griffmaße sind abgelesen, die Querschnittsform ist angenommen. Zuerst Profilschablone und Passungsset drucken.
+Status: **final v1.** Profilform mit der Schablone bestätigt (Kerbe 1 = Ellipse), Durchmesser auf Wunsch um 1 mm vergrößert. Der Clip selbst ist noch ungedruckt.
 
 ![Übersicht](out/overview.png)
 
@@ -10,18 +10,18 @@ Kleine C-Clips, die seitlich auf den Henkel eines 1-l-Maßkrugs geklipst werden.
 
 | Parameter | Wert | Quelle |
 |---|---|---|
-| Griffbreite quer zur Henkelebene | 21,9 mm | Messschieber, Foto 03, abgelesen ±0,3 mm |
-| Griffstärke in der Henkelebene | 13,6 mm | Messschieber, Foto 04, abgelesen ±0,3 mm |
-| Querschnittsform | Superellipse n = 2,5 (zwischen Ellipse und abgerundetem Rechteck) | **ANGENOMMEN**, aus Foto 02 |
+| Griffbreite quer zur Henkelebene | 22,9 mm | Messschieber 21,9 mm (Foto 03) + 1 mm, weil die Schablone knapp saß (Foto 05) |
+| Griffstärke in der Henkelebene | 14,6 mm | Messschieber 13,6 mm (Foto 04) + 1 mm |
+| Querschnittsform | Ellipse (n = 2,0) | mit der Profilschablone geprüft, Kerbe 1 passt |
 | Profil entlang des Griffs konstant | ja | **ANGENOMMEN**, gemessen wurde am oberen Henkelbogen |
 
 ## Konstruktion
 
 - **Clip:**
-  - Die Innenkontur ist 0,3 mm kleiner als der Griff. Die Vorspannung hält den Clip auf dem glatten Glas.
+  - Die Innenkontur ist 0,4 mm kleiner als das Nennprofil 22,9 × 14,6 mm, also etwa 0,1 mm größer als die Schablone, die knapp gepasst hat. Die Vorspannung hält den Clip auf dem glatten Glas.
   - Wand 2,0 mm, Länge 10 mm entlang des Griffs.
   - Die Öffnung sitzt an einer Seitenkante des Griffs. Aufgeschoben wird seitlich, dabei muss die Öffnung nur auf die Griffstärke von 13,6 mm aufgehen, nicht auf die Breite von 21,9 mm.
-  - Öffnung 9,8 mm, 1,9 mm Hinterschnitt je Seite, Umschlingung 270°. Die abgerundeten Lippen wirken als Einführschräge.
+  - Öffnung 10,5 mm, 2,0 mm Hinterschnitt je Seite, Umschlingung 260°. Die abgerundeten Lippen wirken als Einführschräge.
 - **Druck:** Das C-Profil liegt flach auf dem Bett. Die Biegung beim Aufklipsen verläuft damit entlang der Druckbahnen, also in der starken Richtung, nicht quer über die Schichtgrenzen. Unten 0,4-mm-Fase im 45°-Winkel, oben verrundet. Keine Stützen.
 - **Symbole:** 8 Varianten: `plain`, `circle`, `square`, `triangle`, `diamond`, `cross`, `star`, `heart`. Sie sind 0,8 mm tief in die Plakette versenkt, die 1,4 mm über der Wand steht. Die Wand selbst wird nicht geschwächt.
 
@@ -29,11 +29,11 @@ Kleine C-Clips, die seitlich auf den Henkel eines 1-l-Maßkrugs geklipst werden.
 
 | Prüfung | Ergebnis |
 |---|---|
-| Umschlingung des Griffs | 270,5° |
-| Hinterschnitt je Seite | 1,9 mm |
-| Nötige Aufweitung beim Aufklipsen | 3,8 mm |
+| Umschlingung des Griffs | 260,5° |
+| Hinterschnitt je Seite | 2,0 mm |
+| Nötige Aufweitung beim Aufklipsen | 4,1 mm |
 | Dehnung beim Aufklipsen | ≈ 0,9 % (Näherung für einen geschlitzten Ring). Die Streckgrenze liegt bei PETG bei grob 2,5 %, bei PLA bei grob 2 %, gedruckt eher darunter. |
-| Vorspannungsfläche | 14,1 mm² |
+| Vorspannungsfläche | 17,8 mm² |
 
 Die Dehnung ist nur eine Balken-Näherung, keine FEM. Die Plakette versteift einen Arm, das ist nicht berücksichtigt.
 
@@ -42,19 +42,18 @@ Die Dehnung ist nur eine Balken-Näherung, keine FEM. Die Plakette versteift ein
 | Datei | Inhalt | Masse |
 |---|---|---|
 | `masskrug_profile_gauge.*` | Profilschablone: 3 halbe Griffprofile (n = 2,0 / 2,5 / 3,0, markiert mit 1 / 2 / 3 Punkten), 69 × 19 × 2 mm | 2,3 g |
-| `masskrug_fit_set.*` | 3 Clips ohne Symbol mit Vorspannung 0,0 / 0,3 / 0,6 mm (1 / 2 / 3 Punkte) | 4,5 g |
-| `masskrug_clip_<symbol>.*` | Einzelclip, 22,7 × 18,4 × 10 mm | 1,5 g |
+| `masskrug_fit_set.*` | 3 Clips ohne Symbol mit Vorspannung 0,2 / 0,4 / 0,6 mm (1 / 2 / 3 Punkte), 0,4 ist der Standard | 4,5 g |
+| `masskrug_clip_<symbol>.*` | Einzelclip, 22,3 × 19,2 × 10 mm | 1,5 g |
 | `masskrug_clip_set.*` | alle 8 Symbole auf einer Platte (8 Körper) | 12 g |
 | `masskrug_report.json` | Prüfbericht | |
 
 ## Vorgehen
 
-1. **Schablone** drucken und die drei Aussparungen seitlich an den Griff halten, dort wo der Clip sitzen soll. Die Aussparung ohne Lichtspalt zeigt die Form n.
-2. **Passungsset** drucken. Gut ist der Clip, der ohne Gewalt einrastet und sich nicht von selbst verschiebt.
-3. Neu erzeugen und das Set drucken, eine Farbe pro Clip:
+1. `masskrug_clip_set.3mf` drucken, eine Farbe pro Clip. Oder die Einzeldateien nacheinander.
+2. Sitzt der Clip zu locker oder zu stramm: Clip 1 oder 3 aus dem Passungsset testen und mit dem passenden Wert neu erzeugen:
 
 ```bash
-python3 projects/masskrug-marker/generate.py --symbol all --profile-n <n> --grip <Wert>
+python3 projects/masskrug-marker/generate.py --symbol all --grip <0.2|0.6>
 ```
 
 ## Druck (Bambu Lab A1 mini)
@@ -64,11 +63,9 @@ python3 projects/masskrug-marker/generate.py --symbol all --profile-n <n> --grip
 - Mehrfarbig: In Bambu Studio jedem Clip des Sets einen eigenen Filament-Slot zuweisen, falls ein AMS lite vorhanden ist. Sonst die Einzeldateien nacheinander in verschiedenen Farben drucken.
 - Der Clip berührt nur den Henkel, nicht den Trinkrand. Für PETG wird trotzdem keine Lebensmitteltauglichkeit zugesichert.
 
-## Offene Fragen
+## Offene Punkte
 
-1. Welche Form hat die Schablone ergeben, und welcher Clip aus dem Passungsset passt?
-2. Wo am Henkel soll der Clip sitzen: am senkrechten Griffteil oder am oberen Bogen? Gemessen wurde am oberen Bogen.
-3. Hast du ein AMS lite für mehrfarbige Platten?
-4. Sollen Namen oder Initialen statt Symbolen aufgebracht werden? Das braucht eine Schrift-Pipeline, die es im Repo noch nicht gibt.
+1. Rückmeldung zum ersten echten Clip: Sitz, Rutschen, Aufklipskraft.
+2. Initialen statt Symbolen bräuchten eine Schrift-Pipeline (noch nicht vorhanden).
 
-Generated by AI | Quellen: Messungen und Fotos des Nutzers (`reference/01–04`), Designreferenzen aus MakerWorld-Screenshots des Nutzers (`reference/ref_*.png`). Streckgrenzen und Glasübergangstemperaturen sind grobe Richtwerte für ungefüllte Filamente, keine Herstellerangaben.
+Generated by AI | Quellen: Messungen und Fotos des Nutzers (`reference/01–05`), Designreferenzen aus MakerWorld-Screenshots des Nutzers (`reference/ref_*.png`). Streckgrenzen und Glasübergangstemperaturen sind grobe Richtwerte für ungefüllte Filamente, keine Herstellerangaben.

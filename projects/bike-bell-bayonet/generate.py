@@ -48,8 +48,8 @@ class Params:
     nub_gap: float = 11.0         # inner gap between nubs (confirmed: inner gap)
     nub_h: float = 1.0            # nub protrusion above the bell contact face "ca. 1 mm"
     lug_h: float = 3.0            # axial thickness of the lugs "ca. 3 mm" (photo 07: ~2.5)
-    # --- bell (male) : UNCERTAIN, resolve with the fit-coupon trio
-    clamp_gap: float = 3.4        # contact face -> lug underside: user "<4", photo 07 ~2.9-3.2
+    # --- bell (male) : resolved with the fit-coupon trio
+    clamp_gap: float = 3.4        # VERIFIED by coupon trio: 3.0 "sitzt gut", 3.4 "bombenfest" -> 3.4
     head_above: float = 1.2       # centre bump above the lugs (total "etwas mehr als 6 mm")
     bell_d: float = 35.0          # bell base diameter (visual only), estimated from photo 01
     # --- fit (FDM)

@@ -1,9 +1,9 @@
 {
   "params": {
-    "bar_w": 21.9,
-    "bar_t": 13.6,
-    "profile_n": 2.5,
-    "grip": 0.3,
+    "bar_w": 22.9,
+    "bar_t": 14.6,
+    "profile_n": 2.0,
+    "grip": 0.4,
     "band_t": 2.0,
     "clip_w": 10.0,
     "gap_ratio": 0.72,
@@ -15,29 +15,29 @@
     "badge_h": 1.4,
     "symbol_depth": 0.8,
     "material": "PETG",
-    "fit_grips": "0.0,0.3,0.6",
+    "fit_grips": "0.2,0.4,0.6",
     "gauge_ns": "2.0,2.5,3.0"
   },
   "derived": {
-    "ai": 10.65,
-    "bi": 6.5,
-    "gap": 9.792,
-    "x_lip": 8.12,
-    "y_face": 9.9,
-    "R_eff": 9.575,
-    "snap_opening": 3.808,
-    "retention_per_side": 1.904,
+    "ai": 11.05,
+    "bi": 6.9,
+    "gap": 10.512,
+    "x_lip": 7.159,
+    "y_face": 10.3,
+    "R_eff": 9.975,
+    "snap_opening": 4.088,
+    "retention_per_side": 2.044,
     "strain_est": 0.009
   },
   "functional_test": {
-    "preload_overlap_mm2": 14.14,
-    "gap_mm": 9.79,
-    "snap_opening_mm": 3.81,
-    "retention_per_side_mm": 1.9,
-    "strain_est_pct": 0.88,
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 0.87,
     "yield_strain_pct": 2.5,
     "min_wall_mm": 2.0,
-    "wrap_deg": 270.5,
+    "wrap_deg": 260.5,
     "ok": true
   },
   "gauge_exponents": [
@@ -50,171 +50,171 @@
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54804,
+      "faces": 51984,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.191,
+      "volume_cm3": 1.178,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.223,
-      "overhang_area_gt60deg_pct": 1.223,
-      "overhang_area_gt45deg_mm2": 16.4
+      "overhang_area_gt45deg_pct": 1.221,
+      "overhang_area_gt60deg_pct": 1.221,
+      "overhang_area_gt45deg_mm2": 16.0
     },
     "clip_circle": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 55060,
+      "faces": 52240,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.174,
+      "volume_cm3": 1.161,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.453,
+      "overhang_area_gt45deg_pct": 1.456,
       "overhang_area_gt60deg_pct": 1.363,
-      "overhang_area_gt45deg_mm2": 19.6
+      "overhang_area_gt45deg_mm2": 19.3
     },
     "clip_square": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54820,
+      "faces": 52000,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.174,
+      "volume_cm3": 1.161,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.482,
-      "overhang_area_gt60deg_pct": 1.482,
-      "overhang_area_gt45deg_mm2": 20.0
+      "overhang_area_gt45deg_pct": 1.485,
+      "overhang_area_gt60deg_pct": 1.485,
+      "overhang_area_gt45deg_mm2": 19.7
     },
     "clip_triangle": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54816,
+      "faces": 51996,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.179,
+      "volume_cm3": 1.166,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.211,
-      "overhang_area_gt60deg_pct": 1.211,
-      "overhang_area_gt45deg_mm2": 16.4
+      "overhang_area_gt45deg_pct": 1.208,
+      "overhang_area_gt60deg_pct": 1.208,
+      "overhang_area_gt45deg_mm2": 16.0
     },
     "clip_diamond": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54820,
+      "faces": 52000,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.177,
+      "volume_cm3": 1.163,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.211,
-      "overhang_area_gt60deg_pct": 1.211,
-      "overhang_area_gt45deg_mm2": 16.4
+      "overhang_area_gt45deg_pct": 1.209,
+      "overhang_area_gt60deg_pct": 1.209,
+      "overhang_area_gt45deg_mm2": 16.0
     },
     "clip_cross": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54852,
+      "faces": 52032,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.177,
+      "volume_cm3": 1.164,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.538,
-      "overhang_area_gt60deg_pct": 1.538,
-      "overhang_area_gt45deg_mm2": 20.8
+      "overhang_area_gt45deg_pct": 1.542,
+      "overhang_area_gt60deg_pct": 1.542,
+      "overhang_area_gt45deg_mm2": 20.5
     },
     "clip_star": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 54844,
+      "faces": 52024,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.18,
+      "volume_cm3": 1.166,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.477,
-      "overhang_area_gt60deg_pct": 1.477,
-      "overhang_area_gt45deg_mm2": 20.0
+      "overhang_area_gt45deg_pct": 1.48,
+      "overhang_area_gt60deg_pct": 1.48,
+      "overhang_area_gt45deg_mm2": 19.7
     },
     "clip_heart": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 55124,
+      "faces": 52304,
       "bbox_mm": [
-        22.74,
-        18.4,
+        22.29,
+        19.2,
         10.0
       ],
-      "volume_cm3": 1.179,
+      "volume_cm3": 1.166,
       "material": "PETG",
       "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.5,
-      "overhang_area_gt60deg_pct": 1.404,
-      "overhang_area_gt45deg_mm2": 20.3
+      "overhang_area_gt45deg_pct": 1.504,
+      "overhang_area_gt60deg_pct": 1.405,
+      "overhang_area_gt45deg_mm2": 19.9
     },
     "clip_set": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 8,
-      "faces": 439140,
+      "faces": 416580,
       "bbox_mm": [
-        124.74,
-        48.4,
+        124.29,
+        49.2,
         10.0
       ],
-      "volume_cm3": 9.43,
+      "volume_cm3": 9.324,
       "material": "PETG",
-      "mass_g_at_100pct": 12.0,
-      "overhang_area_gt45deg_pct": 1.387,
+      "mass_g_at_100pct": 11.8,
+      "overhang_area_gt45deg_pct": 1.388,
       "overhang_area_gt60deg_pct": 1.364,
-      "overhang_area_gt45deg_mm2": 149.9
+      "overhang_area_gt45deg_mm2": 146.9
     },
     "fit_set": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 3,
-      "faces": 164904,
+      "faces": 155698,
       "bbox_mm": [
-        90.5,
-        19.0,
+        90.12,
+        19.6,
         10.0
       ],
-      "volume_cm3": 3.562,
+      "volume_cm3": 3.523,
       "material": "PETG",
       "mass_g_at_100pct": 4.5,
       "overhang_area_gt45deg_pct": 1.343,
-      "overhang_area_gt60deg_pct": 1.312,
-      "overhang_area_gt45deg_mm2": 54.1
+      "overhang_area_gt60deg_pct": 1.311,
+      "overhang_area_gt45deg_mm2": 53.1
     },
     "profile_gauge": {
       "watertight": true,
@@ -222,13 +222,13 @@
       "bodies": 1,
       "faces": 1776,
       "bbox_mm": [
-        68.8,
-        18.95,
+        71.8,
+        19.45,
         2.0
       ],
-      "volume_cm3": 1.829,
+      "volume_cm3": 1.922,
       "material": "PETG",
-      "mass_g_at_100pct": 2.3,
+      "mass_g_at_100pct": 2.4,
       "overhang_area_gt45deg_pct": 0.0,
       "overhang_area_gt60deg_pct": 0.0,
       "overhang_area_gt45deg_mm2": 0.0
