@@ -29,6 +29,9 @@ import manifold3d as m3  # noqa: E402
 
 from tdg import check, cli, mesh, render  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import icons  # noqa: E402
+
 SEG = 160
 SYMBOLS = ("plain", "circle", "square", "triangle", "diamond", "cross", "star", "heart")
 YIELD_STRAIN = {"PLA": 0.02, "PETG": 0.025}   # rough bulk values; printed parts are lower
@@ -52,7 +55,7 @@ class Params:
     edge_r: float = 0.8           # rounded top edge
     edge_c: float = 0.4           # 45 deg chamfer on the bed edge (no overhang)
     # --- badge
-    symbol: str = "circle"        # one of SYMBOLS or "all"
+    symbol: str = "circle"        # SYMBOLS / icons.ICONS name / "plug_3d" / "all" (basic set) / "icons" (library)
     badge_w: float = 12.0
     badge_h: float = 1.4          # badge height above the band
     symbol_depth: float = 0.8
@@ -155,19 +158,33 @@ def rounded_extrude(cs, H, r_top, c_bot, dz=0.1):
 
 
 def face_cut(p: Params, d, cs2d, depth):
-    """Cut a 2D shape (u = x, v = z) into the badge face (+Y)."""
-    return cs2d.translate([0, p.clip_w / 2]).extrude(depth + 1).rotate([90, 0, 0]).translate([0, d["y_face"] + 1, 0])
+    """Cut a 2D shape into the badge face (+Y). Seen from outside (looking along -Y) +x points
+    left, so u is mirrored to keep text and asymmetric icons readable."""
+    cut = cs2d.mirror([1, 0]).translate([0, p.clip_w / 2]).extrude(depth + 1)
+    return cut.rotate([90, 0, 0]).translate([0, d["y_face"] + 1, 0])
 
 
 def build_clip(p: Params, symbol=None, dimples=0):
     d = derived(p)
     symbol = symbol or p.symbol
     body = rounded_extrude(clip2d(p, d, badge=True), p.clip_w, p.edge_r, p.edge_c)
-    if symbol != "plain":
+    if symbol == "plug_3d":
+        body += plug_3d(p, d)
+    elif symbol in icons.ICONS:
+        body -= face_cut(p, d, icons.get(symbol), p.symbol_depth)
+    elif symbol != "plain":
         body -= face_cut(p, d, symbol2d(symbol), p.symbol_depth)
     if dimples:
         body -= face_cut(p, d, dimples2d(dimples), 0.6)
     return body, d
+
+
+def plug_3d(p: Params, d, L=11.0):
+    """Revolved plug standing out of the badge (+Y). Lies horizontally in print pose -> needs supports."""
+    y, r = icons.plug_profile(L=L)
+    pts = [(0.0, 0.0)] + [(float(ri), float(yi)) for yi, ri in zip(y, r)] + [(0.0, L)]
+    solid = m3.CrossSection([pts]).revolve(96)                    # axis = Z
+    return solid.rotate([-90, 0, 0]).translate([0, d["y_face"] - 0.4, p.clip_w / 2])
 
 
 def build_gauge(p: Params):
@@ -229,6 +246,8 @@ def generate(p: Params, out_dir: Path, previews=True):
     ft = functional_test(p, d)
     assert ft["ok"], f"functional test failed: {ft}"
     reports = {}
+    if p.symbol == "icons":
+        return generate_icons(p, out_dir, d, ft)
     names = SYMBOLS if p.symbol == "all" else (p.symbol,)
     plate = m3.Manifold()
     for i, s in enumerate(names):
@@ -251,6 +270,29 @@ def generate(p: Params, out_dir: Path, previews=True):
     print({"functional_test": ft, "clip": {k: reports[f"clip_{names[0]}"][k]
                                            for k in ("bbox_mm", "volume_cm3", "mass_g_at_100pct",
                                                      "overhang_area_gt45deg_mm2")}})
+    return summary
+
+
+def generate_icons(p: Params, out_dir: Path, d, ft, names=None, simplify_eps=0.005):
+    """One 3MF per library icon (+ the 3D plug) in out/icons/, plus a contact sheet."""
+    idir = out_dir / "icons"
+    idir.mkdir(parents=True, exist_ok=True)
+    names = names or list(icons.ICONS) + ["plug_3d"]
+    reports = {}
+    for name in names:
+        chk = icons.check_icon(icons.get(name)) if name in icons.ICONS else {}
+        assert not chk or chk["inside_box"], f"icon {name} leaves the badge"
+        M, _ = build_clip(p, name)
+        tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
+        cat = icons.ICONS[name][0] if name in icons.ICONS else "joke"
+        mesh.export(tm, str(idir / f"masskrug_{cat}_{name}"), formats=("3mf",))
+        rep = check.report(tm, p.material)
+        check.assert_printable(rep)
+        rep.update(icon_check=chk, category=cat, needs_supports=name == "plug_3d")
+        reports[name] = rep
+    summary = dict(params=asdict(p), functional_test=ft, icons=reports)
+    check.write(summary, str(idir / "icons_report.json"))
+    print({n: (r["category"], r["bbox_mm"], r["overhang_area_gt45deg_mm2"]) for n, r in reports.items()})
     return summary
 
 

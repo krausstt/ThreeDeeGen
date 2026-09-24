@@ -41,3 +41,17 @@ def test_masskrug_marker(tmp_path):
     assert ft["ok"] and ft["wrap_deg"] > 200 and ft["retention_per_side_mm"] >= 1.2
     assert s["parts"]["fit_set"]["bodies"] == 3
     assert s["parts"]["clip_star"]["watertight"] and s["parts"]["clip_star"]["bodies"] == 1
+
+
+def test_masskrug_icons(tmp_path):
+    g = load("masskrug-marker")
+    icons = g.icons
+    for name in icons.ICONS:
+        chk = icons.check_icon(icons.get(name))
+        assert chk["inside_box"], name
+        assert chk["thin_recess_pct"] < 25, (name, chk)
+    p = g.Params()
+    s = g.generate_icons(p, tmp_path, g.derived(p), g.functional_test(p, g.derived(p)),
+                         names=["heart", "pr0", "plug_3d"])
+    for r in s["icons"].values():
+        assert r["watertight"] and r["bodies"] == 1

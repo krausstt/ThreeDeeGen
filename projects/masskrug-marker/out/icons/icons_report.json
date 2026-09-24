@@ -1,0 +1,1029 @@
+{
+  "params": {
+    "bar_w": 22.9,
+    "bar_t": 14.6,
+    "profile_n": 2.0,
+    "grip": 0.4,
+    "band_t": 2.0,
+    "clip_w": 10.0,
+    "gap_ratio": 0.72,
+    "lip_r": 0.7,
+    "edge_r": 0.8,
+    "edge_c": 0.4,
+    "symbol": "icons",
+    "badge_w": 12.0,
+    "badge_h": 1.4,
+    "symbol_depth": 0.8,
+    "material": "PETG",
+    "fit_grips": "0.2,0.4,0.6",
+    "gauge_ns": "2.0,2.5,3.0"
+  },
+  "functional_test": {
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 0.87,
+    "yield_strain_pct": 2.5,
+    "min_wall_mm": 2.0,
+    "wrap_deg": 260.5,
+    "ok": true
+  },
+  "icons": {
+    "heart": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13636,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.526,
+      "overhang_area_gt60deg_pct": 1.428,
+      "overhang_area_gt45deg_mm2": 20.2,
+      "icon_check": {
+        "area_mm2": 26.1,
+        "thin_recess_pct": 0.4,
+        "thin_wall_mm2": 0.29,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "spade": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13572,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.158,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.439,
+      "overhang_area_gt60deg_pct": 1.209,
+      "overhang_area_gt45deg_mm2": 19.1,
+      "icon_check": {
+        "area_mm2": 22.9,
+        "thin_recess_pct": 1.4,
+        "thin_wall_mm2": 0.4,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "club": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13600,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.153,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.531,
+      "overhang_area_gt60deg_pct": 1.431,
+      "overhang_area_gt45deg_mm2": 20.4,
+      "icon_check": {
+        "area_mm2": 28.8,
+        "thin_recess_pct": 0.7,
+        "thin_wall_mm2": 0.53,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "card_diamond": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13444,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.163,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.227,
+      "overhang_area_gt60deg_pct": 1.207,
+      "overhang_area_gt45deg_mm2": 16.2,
+      "icon_check": {
+        "area_mm2": 16.3,
+        "thin_recess_pct": 2.2,
+        "thin_wall_mm2": 0.18,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "chip": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14084,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.161,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.103,
+      "overhang_area_gt60deg_pct": 1.728,
+      "overhang_area_gt45deg_mm2": 28.5,
+      "icon_check": {
+        "area_mm2": 18.8,
+        "thin_recess_pct": 7.2,
+        "thin_wall_mm2": 0.18,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "ace": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13748,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.166,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.613,
+      "overhang_area_gt60deg_pct": 1.395,
+      "overhang_area_gt45deg_mm2": 21.5,
+      "icon_check": {
+        "area_mm2": 13.2,
+        "thin_recess_pct": 0.7,
+        "thin_wall_mm2": 0.48,
+        "inside_box": true
+      },
+      "category": "poker",
+      "needs_supports": false
+    },
+    "smiley": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14380,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.161,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.043,
+      "overhang_area_gt60deg_pct": 1.762,
+      "overhang_area_gt45deg_mm2": 27.7,
+      "icon_check": {
+        "area_mm2": 19.8,
+        "thin_recess_pct": 0.1,
+        "thin_wall_mm2": 0.44,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "cool": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14300,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.158,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.168,
+      "overhang_area_gt60deg_pct": 1.896,
+      "overhang_area_gt45deg_mm2": 29.4,
+      "icon_check": {
+        "area_mm2": 22.5,
+        "thin_recess_pct": 5.3,
+        "thin_wall_mm2": 1.64,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "skull": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13868,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.685,
+      "overhang_area_gt60deg_pct": 1.527,
+      "overhang_area_gt45deg_mm2": 22.6,
+      "icon_check": {
+        "area_mm2": 26.1,
+        "thin_recess_pct": 4.9,
+        "thin_wall_mm2": 0.74,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "fire": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13300,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.162,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.259,
+      "overhang_area_gt60deg_pct": 1.259,
+      "overhang_area_gt45deg_mm2": 16.8,
+      "icon_check": {
+        "area_mm2": 17.9,
+        "thin_recess_pct": 4.5,
+        "thin_wall_mm2": 0.55,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "poop": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13648,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.16,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.667,
+      "overhang_area_gt60deg_pct": 1.565,
+      "overhang_area_gt45deg_mm2": 22.2,
+      "icon_check": {
+        "area_mm2": 21.2,
+        "thin_recess_pct": 1.3,
+        "thin_wall_mm2": 0.73,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "ghost": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14092,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.587,
+      "overhang_area_gt60deg_pct": 1.444,
+      "overhang_area_gt45deg_mm2": 21.2,
+      "icon_check": {
+        "area_mm2": 25.0,
+        "thin_recess_pct": 1.0,
+        "thin_wall_mm2": 0.18,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "eggplant": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13680,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.16,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.472,
+      "overhang_area_gt60deg_pct": 1.382,
+      "overhang_area_gt45deg_mm2": 19.6,
+      "icon_check": {
+        "area_mm2": 21.1,
+        "thin_recess_pct": 0.9,
+        "thin_wall_mm2": 0.26,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "peach": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13692,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.148,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.694,
+      "overhang_area_gt60deg_pct": 1.547,
+      "overhang_area_gt45deg_mm2": 22.7,
+      "icon_check": {
+        "area_mm2": 35.1,
+        "thin_recess_pct": 0.2,
+        "thin_wall_mm2": 0.4,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "lightning": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13276,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.168,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.312,
+      "overhang_area_gt60deg_pct": 1.312,
+      "overhang_area_gt45deg_mm2": 17.4,
+      "icon_check": {
+        "area_mm2": 10.0,
+        "thin_recess_pct": 10.9,
+        "thin_wall_mm2": 0.32,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "beer": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13516,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.154,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.625,
+      "overhang_area_gt60deg_pct": 1.564,
+      "overhang_area_gt45deg_mm2": 21.7,
+      "icon_check": {
+        "area_mm2": 28.4,
+        "thin_recess_pct": 4.5,
+        "thin_wall_mm2": 0.55,
+        "inside_box": true
+      },
+      "category": "emoji",
+      "needs_supports": false
+    },
+    "mass": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14284,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.73,
+      "overhang_area_gt60deg_pct": 1.621,
+      "overhang_area_gt45deg_mm2": 23.2,
+      "icon_check": {
+        "area_mm2": 26.2,
+        "thin_recess_pct": 10.6,
+        "thin_wall_mm2": 0.79,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "brezn": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13516,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.152,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.759,
+      "overhang_area_gt60deg_pct": 1.502,
+      "overhang_area_gt45deg_mm2": 23.8,
+      "icon_check": {
+        "area_mm2": 30.3,
+        "thin_recess_pct": 0.0,
+        "thin_wall_mm2": 0.72,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "raute": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13556,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.14,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.4,
+      "overhang_area_gt45deg_pct": 4.009,
+      "overhang_area_gt60deg_pct": 1.529,
+      "overhang_area_gt45deg_mm2": 56.0,
+      "icon_check": {
+        "area_mm2": 45.2,
+        "thin_recess_pct": 8.2,
+        "thin_wall_mm2": 16.11,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "lebkuchenherz": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14604,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.163,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.905,
+      "overhang_area_gt60deg_pct": 1.513,
+      "overhang_area_gt45deg_mm2": 25.6,
+      "icon_check": {
+        "area_mm2": 16.8,
+        "thin_recess_pct": 0.9,
+        "thin_wall_mm2": 1.22,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "weisswurst": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13844,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.147,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.365,
+      "overhang_area_gt60deg_pct": 2.279,
+      "overhang_area_gt45deg_mm2": 31.8,
+      "icon_check": {
+        "area_mm2": 36.9,
+        "thin_recess_pct": 0.0,
+        "thin_wall_mm2": 0.24,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "edelweiss": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14144,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.159,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.911,
+      "overhang_area_gt60deg_pct": 1.657,
+      "overhang_area_gt45deg_mm2": 25.7,
+      "icon_check": {
+        "area_mm2": 22.3,
+        "thin_recess_pct": 4.0,
+        "thin_wall_mm2": 2.46,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "lederhosn": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13384,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.586,
+      "overhang_area_gt60deg_pct": 1.561,
+      "overhang_area_gt45deg_mm2": 21.2,
+      "icon_check": {
+        "area_mm2": 25.6,
+        "thin_recess_pct": 1.2,
+        "thin_wall_mm2": 0.83,
+        "inside_box": true
+      },
+      "category": "bavaria",
+      "needs_supports": false
+    },
+    "frauenkirche": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13582,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.151,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.602,
+      "overhang_area_gt60deg_pct": 1.51,
+      "overhang_area_gt45deg_mm2": 21.5,
+      "icon_check": {
+        "area_mm2": 31.6,
+        "thin_recess_pct": 3.2,
+        "thin_wall_mm2": 1.88,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "olympiaturm": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13502,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.167,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.584,
+      "overhang_area_gt60deg_pct": 1.536,
+      "overhang_area_gt45deg_mm2": 21.1,
+      "icon_check": {
+        "area_mm2": 11.3,
+        "thin_recess_pct": 15.7,
+        "thin_wall_mm2": 0.41,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "kindl": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13660,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.155,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.609,
+      "overhang_area_gt60deg_pct": 1.481,
+      "overhang_area_gt45deg_mm2": 21.5,
+      "icon_check": {
+        "area_mm2": 27.1,
+        "thin_recess_pct": 1.9,
+        "thin_wall_mm2": 0.5,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "arena": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13596,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.147,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.748,
+      "overhang_area_gt60deg_pct": 2.673,
+      "overhang_area_gt45deg_mm2": 37.3,
+      "icon_check": {
+        "area_mm2": 36.9,
+        "thin_recess_pct": 2.2,
+        "thin_wall_mm2": 0.18,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "089": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13696,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.153,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.027,
+      "overhang_area_gt60deg_pct": 1.987,
+      "overhang_area_gt45deg_mm2": 27.7,
+      "icon_check": {
+        "area_mm2": 29.1,
+        "thin_recess_pct": 0.1,
+        "thin_wall_mm2": 1.5,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "muc": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13796,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.158,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.653,
+      "overhang_area_gt60deg_pct": 1.589,
+      "overhang_area_gt45deg_mm2": 22.5,
+      "icon_check": {
+        "area_mm2": 23.1,
+        "thin_recess_pct": 0.1,
+        "thin_wall_mm2": 0.81,
+        "inside_box": true
+      },
+      "category": "munich",
+      "needs_supports": false
+    },
+    "pr0": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13732,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.155,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.96,
+      "overhang_area_gt60deg_pct": 1.813,
+      "overhang_area_gt45deg_mm2": 26.7,
+      "icon_check": {
+        "area_mm2": 27.0,
+        "thin_recess_pct": 0.1,
+        "thin_wall_mm2": 1.55,
+        "inside_box": true
+      },
+      "category": "pr0gramm",
+      "needs_supports": false
+    },
+    "fliesentisch": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13452,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.152,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.542,
+      "overhang_area_gt60deg_pct": 2.542,
+      "overhang_area_gt45deg_mm2": 34.8,
+      "icon_check": {
+        "area_mm2": 30.2,
+        "thin_recess_pct": 19.6,
+        "thin_wall_mm2": 0.54,
+        "inside_box": true
+      },
+      "category": "pr0gramm",
+      "needs_supports": false
+    },
+    "benis": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13332,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 2.103,
+      "overhang_area_gt60deg_pct": 2.011,
+      "overhang_area_gt45deg_mm2": 28.6,
+      "icon_check": {
+        "area_mm2": 25.5,
+        "thin_recess_pct": 2.2,
+        "thin_wall_mm2": 0.4,
+        "inside_box": true
+      },
+      "category": "pr0gramm",
+      "needs_supports": false
+    },
+    "67": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13548,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.165,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.691,
+      "overhang_area_gt60deg_pct": 1.662,
+      "overhang_area_gt45deg_mm2": 22.7,
+      "icon_check": {
+        "area_mm2": 13.8,
+        "thin_recess_pct": 0.1,
+        "thin_wall_mm2": 0.51,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "stonks": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13356,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.165,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.53,
+      "overhang_area_gt60deg_pct": 1.435,
+      "overhang_area_gt45deg_mm2": 20.4,
+      "icon_check": {
+        "area_mm2": 14.6,
+        "thin_recess_pct": 2.5,
+        "thin_wall_mm2": 0.35,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "penguin": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14056,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.164,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.547,
+      "overhang_area_gt60deg_pct": 1.442,
+      "overhang_area_gt45deg_mm2": 20.7,
+      "icon_check": {
+        "area_mm2": 15.9,
+        "thin_recess_pct": 14.4,
+        "thin_wall_mm2": 0.67,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "spinner": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14408,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.157,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.84,
+      "overhang_area_gt60deg_pct": 1.626,
+      "overhang_area_gt45deg_mm2": 24.8,
+      "icon_check": {
+        "area_mm2": 24.2,
+        "thin_recess_pct": 2.2,
+        "thin_wall_mm2": 0.25,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "labubu": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14130,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.16,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.562,
+      "overhang_area_gt60deg_pct": 1.49,
+      "overhang_area_gt45deg_mm2": 20.9,
+      "icon_check": {
+        "area_mm2": 21.0,
+        "thin_recess_pct": 7.2,
+        "thin_wall_mm2": 0.96,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "tungtung": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13796,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.152,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.644,
+      "overhang_area_gt60deg_pct": 1.532,
+      "overhang_area_gt45deg_mm2": 22.1,
+      "icon_check": {
+        "area_mm2": 30.7,
+        "thin_recess_pct": 1.5,
+        "thin_wall_mm2": 1.15,
+        "inside_box": true
+      },
+      "category": "memes",
+      "needs_supports": false
+    },
+    "plug": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 13528,
+      "bbox_mm": [
+        22.29,
+        19.2,
+        10.0
+      ],
+      "volume_cm3": 1.156,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 1.728,
+      "overhang_area_gt60deg_pct": 1.498,
+      "overhang_area_gt45deg_mm2": 23.0,
+      "icon_check": {
+        "area_mm2": 25.7,
+        "thin_recess_pct": 1.0,
+        "thin_wall_mm2": 0.31,
+        "inside_box": true
+      },
+      "category": "joke",
+      "needs_supports": false
+    },
+    "plug_3d": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 20362,
+      "bbox_mm": [
+        22.29,
+        29.8,
+        10.0
+      ],
+      "volume_cm3": 1.295,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.6,
+      "overhang_area_gt45deg_pct": 2.949,
+      "overhang_area_gt60deg_pct": 2.087,
+      "overhang_area_gt45deg_mm2": 42.1,
+      "icon_check": {},
+      "category": "joke",
+      "needs_supports": true
+    }
+  }
+}
