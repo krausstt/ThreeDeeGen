@@ -32,3 +32,12 @@ def test_mae_west_eiffel_coarse(tmp_path):
     _, rep = g.generate(g.Params(voxel=0.8), tmp_path / "m", simplify_eps=0, previews=False)
     assert rep["watertight"] and rep["bodies"] == 1
     assert rep["min_strut_angle_deg"] >= 50.0
+
+
+def test_masskrug_marker(tmp_path):
+    g = load("masskrug-marker")
+    s = g.generate(g.Params(symbol="star"), tmp_path, previews=False)
+    ft = s["functional_test"]
+    assert ft["ok"] and ft["wrap_deg"] > 200 and ft["retention_per_side_mm"] >= 1.2
+    assert s["parts"]["fit_set"]["bodies"] == 3
+    assert s["parts"]["clip_star"]["watertight"] and s["parts"]["clip_star"]["bodies"] == 1
