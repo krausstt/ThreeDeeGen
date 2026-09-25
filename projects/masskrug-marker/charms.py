@@ -341,6 +341,63 @@ def charm_brezn(Lg, r: Rail = Rail()):
     return charm_flat(Lg, icons.brezn(), size=14.0, t=2.8, dome=1.0, r=r)
 
 
+def charm_frauenkirche(Lg, r: Rail = Rail()):
+    """Frauenkirche west front: two square towers with 'welsche Hauben' (every flank <= 45 deg),
+    pointed-arch windows, steep nave roof between/behind the towers."""
+    t = PLATE_T
+    tw, th = 3.4, 13.0                                   # tower width, tower height
+    y0 = t - 0.4
+    parts = []
+    dome = [(0, 0), (1.7, 0), (1.9, 0.4), (1.8, 1.2), (1.3, 2.0), (0.6, 2.5), (0.35, 2.8), (0.35, 3.3),
+            (0.5, 3.5), (0.2, 4.1), (0, 4.5)]
+    for sx in (-1, 1):
+        cx = sx * 2.6
+        tower = m3.Manifold.cube([tw, tw, th]).translate([cx - tw / 2, y0, 0])
+        for z in (6.0, 9.6):                              # pointed-arch windows (45 deg tops)
+            win = m3.CrossSection([[(-0.45, 0), (0.45, 0), (0.45, 1.6), (0, 2.05), (-0.45, 1.6)]]).translate([cx, z])
+            tower -= extrude_xz(win, y0 + tw - 0.5, y0 + tw + 0.1)
+        parts += [tower, revolve_at(dome, cx, y0 + tw / 2).translate([0, 0, th - 0.05])]
+    gable = m3.CrossSection([[(-1.0, 0), (1.0, 0), (1.0, 7.0), (0, 10.5), (-1.0, 7.0)]])
+    parts.append(extrude_xz(gable, y0, y0 + tw - 0.3))
+    portal = m3.CrossSection([[(-0.55, 0), (0.55, 0), (0.55, 1.8), (0, 2.35), (-0.55, 1.8)]])
+    body = m3.Manifold.batch_boolean(parts, m3.OpType.Add) - extrude_xz(portal, y0 + tw - 0.8, y0 + tw + 0.1)
+    return back_plate(Lg, r=r) + body
+
+
+def charm_cuckoo(Lg, r: Rail = Rail()):
+    """Black-Forest cuckoo clock: gable roof with 48-deg eave undersides, clock face with raised hands, cuckoo
+    under the gable, 45-deg carved V bottom (47 deg) (no flat overhang), pendulum and two pine-cone weights
+    standing on the bed."""
+    t = PLATE_T
+    y0, y1 = t - 0.4, t + 4.0
+    house2d = m3.CrossSection([[(-0.3, 6.0), (0.3, 6.0), (4.5, 10.2), (4.5, 14.3), (-4.5, 14.3), (-4.5, 10.2)]])
+    roof2d = m3.CrossSection([[(4.5, 14.2), (5.4, 15.2), (5.4, 15.6), (0, 19.6), (-5.4, 15.6), (-5.4, 15.2),
+                               (-4.5, 14.2)]])                         # CCW
+    house = extrude_xz(house2d, y0, y1) + extrude_xz(roof2d, y0, y1)
+    # clock face: raised disc, 12 hour dots cut, hands raised again
+    fc = (0.0, 11.3)
+    face = extrude_xz(m3.CrossSection.circle(2.3, 64).translate(list(fc)), y1 - 0.1, y1 + 0.6)
+    for k in range(12):
+        a = math.radians(30 * k)
+        face -= m3.Manifold.sphere(0.25, 12).translate([fc[0] + 1.85 * math.cos(a), y1 + 0.6,
+                                                         fc[1] + 1.85 * math.sin(a)])
+    hands = extrude_xz(m3.CrossSection.square([0.45, 1.6]).translate([-0.225, 0]).rotate(-60).translate(list(fc))
+                       + m3.CrossSection.square([0.45, 1.2]).translate([-0.225, 0]).rotate(35).translate(list(fc)),
+                       y1 + 0.5, y1 + 0.9)
+    door = extrude_xz(m3.CrossSection([[(-0.8, 14.5), (0.8, 14.5), (0.8, 15.7), (0, 16.5), (-0.8, 15.7)]]),
+                      y1 - 0.5, y1 + 0.5)
+    bird = m3.Manifold.sphere(0.6, 24).translate([0, y1 - 0.2, 15.3]) \
+        + m3.Manifold.cylinder(0.7, 0.3, 0.0, 16).rotate([-90, 0, 0]).translate([0, y1 + 0.3, 15.3])
+    yc = (y0 + y1) / 2
+    cone = [(0, 0), (1.0, 0), (1.15, 0.6), (1.1, 2.2), (0.7, 3.0), (0.4, 3.4), (0, 3.6)]
+    weights = [revolve_at(cone, sx * 2.4, yc) for sx in (-1, 1)]
+    chains = [m3.Manifold.cylinder(5.5, 0.4, 0.4, 16).translate([sx * 2.4, yc, 3.3]) for sx in (-1, 1)]
+    disc = extrude_xz(m3.CrossSection.circle(1.3, 48).translate([0, 1.35]), yc - 0.4, yc + 0.4)
+    rod = m3.Manifold.cylinder(4.0, 0.35, 0.35, 16).translate([0, yc, 2.4])
+    body = m3.Manifold.batch_boolean([house - door, face, hands, bird, disc, rod] + weights + chains, m3.OpType.Add)
+    return back_plate(Lg, r=r) + bed_cut(body)
+
+
 # name -> (builder, kind) ; kind "flat" = groove underneath (mount_on_clip), "back" = back plate (mount_back)
 FIGURES = {
     "brezn": (charm_brezn, "flat"),
@@ -348,4 +405,6 @@ FIGURES = {
     "bavaria": (charm_bavaria, "back"),
     "thumbsup": (charm_thumbsup, "back"),
     "poop": (charm_poop, "back"),
+    "frauenkirche": (charm_frauenkirche, "back"),
+    "cuckoo": (charm_cuckoo, "back"),
 }

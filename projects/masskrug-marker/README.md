@@ -110,7 +110,9 @@ Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben la
 
 ![Figuren](out/charms/figures_overview.png)
 
-Die Figuren sollen am Krug aufrecht stehen. Ihre Hochachse muss deshalb entlang des Griffs laufen, also in Schieberichtung. Maßkrug, Bavaria, Daumen und Kackhaufen bekommen darum eine **senkrechte Rückenplatte** (10 × 3 × 8,3 mm) mit senkrechter Nut. Sie werden stehend auf ihren Füßen gedruckt, die Nut ist senkrecht extrudiert. Überall **ohne Stützen**.
+![Figuren 2](out/charms/figures2_overview.png)
+
+Die Figuren sollen am Krug aufrecht stehen. Ihre Hochachse muss deshalb entlang des Griffs laufen, also in Schieberichtung. Maßkrug, Bavaria, Daumen, Kackhaufen, Frauenkirche und Kuckucksuhr bekommen darum eine **senkrechte Rückenplatte** (10 × 3 × 8,3 mm) mit senkrechter Nut. Sie werden stehend auf ihren Füßen gedruckt, die Nut ist senkrecht extrudiert. Überall **ohne Stützen**.
 
 | Datei | Figur | Maße (B × T × H) | Überhang > 45° |
 |---|---|---|---|
@@ -119,6 +121,8 @@ Die Figuren sollen am Krug aufrecht stehen. Ihre Hochachse muss deshalb entlang 
 | `masskrug_charm_bavaria.3mf` | Bavaria, stilisiert: Gewand, erhobener Kranz (glatter Ring, kein Eichenlaub), Schwert, Löwe | 11 × 9 × 20,6 mm | 3 mm² (Kranz innen) |
 | `masskrug_charm_thumbsup.3mf` | Daumen hoch: Faust mit Fingerrillen nach außen, Daumen zeigt entlang des Griffs | 10 × 8,6 × 13,8 mm | 10 mm² (Rillendecken, 0,6 mm tief) |
 | `masskrug_charm_poop.3mf` | Kackhaufen-Emoji: 3 Softeis-Stufen (jede Flanke ≤ 45°), Augen, Lächeln | 10 × 11,7 × 11,3 mm | 1 mm² |
+| `masskrug_charm_frauenkirche.3mf` | Frauenkirche, Westfassade: 2 Türme mit Welschen Hauben (alle Flanken ≤ 45°), Spitzbogenfenster, Portal, Giebel dazwischen | 10 × 6,2 × 17,5 mm | 1 mm² |
+| `masskrug_charm_cuckoo.3mf` | Kuckucksuhr: Satteldach, Zifferblatt mit 12 Punkten und Zeigern, Kuckuck im Türchen, V-Boden 47°, Pendel, 2 Tannenzapfen-Gewichte (stehen auf dem Bett) | 10,8 × 8 × 19,6 mm | ≈ 6 mm² vor Netzvereinfachung (Zifferblatt-Unterkante 0,7 mm, V-Spitze), unkritisch |
 
 - **Funktionstest pro Figur:** Sitz 0 mm³, beim Aufschieben nur die Rastkraft der Rampe (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert, Abziehen um 0,4 mm blockiert. Keine Figur stößt an den Clip.
 - **Druckhinweise:**

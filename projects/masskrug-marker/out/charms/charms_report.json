@@ -83,6 +83,20 @@
       "slide_max_mm3": 0.185,
       "past_stop_mm3": 1.384,
       "pull_out_mm3": 1.527
+    },
+    "frauenkirche": {
+      "kind": "back",
+      "seated_mm3": -0.0,
+      "slide_max_mm3": 0.185,
+      "past_stop_mm3": 1.384,
+      "pull_out_mm3": 1.527
+    },
+    "cuckoo": {
+      "kind": "back",
+      "seated_mm3": -0.0,
+      "slide_max_mm3": 0.185,
+      "past_stop_mm3": 1.384,
+      "pull_out_mm3": 1.527
     }
   },
   "heart": {
@@ -241,6 +255,40 @@
       "overhang_area_gt45deg_pct": 0.245,
       "overhang_area_gt60deg_pct": 0.109,
       "overhang_area_gt45deg_mm2": 1.4
+    },
+    "charm_frauenkirche": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 2546,
+      "bbox_mm": [
+        10.0,
+        6.2,
+        17.45
+      ],
+      "volume_cm3": 0.537,
+      "material": "PETG",
+      "mass_g_at_100pct": 0.7,
+      "overhang_area_gt45deg_pct": 0.233,
+      "overhang_area_gt60deg_pct": 0.0,
+      "overhang_area_gt45deg_mm2": 1.4
+    },
+    "charm_cuckoo": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 2884,
+      "bbox_mm": [
+        10.8,
+        8.0,
+        19.6
+      ],
+      "volume_cm3": 0.622,
+      "material": "PETG",
+      "mass_g_at_100pct": 0.8,
+      "overhang_area_gt45deg_pct": 4.772,
+      "overhang_area_gt60deg_pct": 0.571,
+      "overhang_area_gt45deg_mm2": 35.0
     },
     "charm_fit_set": {
       "watertight": true,
