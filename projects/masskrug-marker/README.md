@@ -106,6 +106,25 @@ Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben la
 | `masskrug_charm_blank.3mf` | leerer Fuß mit flacher Oberseite | zum Aufkleben eigener Minis |
 | `masskrug_charm_fit_set.3mf` | 3 leere Füße mit 0,15 / 0,2 / 0,3 mm Spiel (1 / 2 / 3 Punkte) | zuerst drucken |
 
+### 3D-Figuren-Charms
+
+![Figuren](out/charms/figures_overview.png)
+
+Die Figuren sollen am Krug aufrecht stehen. Ihre Hochachse muss deshalb entlang des Griffs laufen, also in Schieberichtung. Maßkrug, Bavaria, Daumen und Kackhaufen bekommen darum eine **senkrechte Rückenplatte** (10 × 3 × 8,3 mm) mit senkrechter Nut. Sie werden stehend auf ihren Füßen gedruckt, die Nut ist senkrecht extrudiert. Überall **ohne Stützen**.
+
+| Datei | Figur | Maße (B × T × H) | Überhang > 45° |
+|---|---|---|---|
+| `masskrug_charm_brezn.3mf` | Brezn, flach wie das Herz, Löcher offen, gewölbte Oberseite | 14 × 12,7 × 8,7 mm | nur Nutdecke und 0,2-mm-Treppen der 42°-Schräge |
+| `masskrug_charm_mass.3mf` | Mini-Maßkrug mit 15 Dellen, Henkel mit 45°-Unterseite, Schaumkrone | 11,6 × 9,2 × 11,7 mm | 3 mm² |
+| `masskrug_charm_bavaria.3mf` | Bavaria, stilisiert: Gewand, erhobener Kranz (glatter Ring, kein Eichenlaub), Schwert, Löwe | 11 × 9 × 20,6 mm | 3 mm² (Kranz innen) |
+| `masskrug_charm_thumbsup.3mf` | Daumen hoch: Faust mit Fingerrillen nach außen, Daumen zeigt entlang des Griffs | 10 × 8,6 × 13,8 mm | 10 mm² (Rillendecken, 0,6 mm tief) |
+| `masskrug_charm_poop.3mf` | Kackhaufen-Emoji: 3 Softeis-Stufen (jede Flanke ≤ 45°), Augen, Lächeln | 10 × 11,7 × 11,3 mm | 1 mm² |
+
+- **Funktionstest pro Figur:** Sitz 0 mm³, beim Aufschieben nur die Rastkraft der Rampe (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert, Abziehen um 0,4 mm blockiert. Keine Figur stößt an den Clip.
+- **Druckhinweise:**
+  - Schwert der Bavaria (Ø 1 mm) und Kranz sind die filigransten Teile. Mit 0,2-mm-Düse oder 0,12-mm-Schicht werden sie sauberer.
+  - Die Bavaria ist 20,6 mm hoch. Etwas langsamer drucken, dann schwingt sie weniger.
+
 **Eigene Minifiguren:** Jedes wasserdichte STL oder 3MF, zum Beispiel von MakerWorld, wird automatisch skaliert (max. 14 × 14 × 22 mm), mittig auf einen Fuß gesetzt und verschmolzen:
 
 ```bash

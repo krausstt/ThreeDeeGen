@@ -349,6 +349,23 @@ def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
         "charm_heart": heart,
         "charm_blank": charms.charm_blank(Lg, rail),
     }
+    clip = parts["clip_rail"]
+    fig_tests = {}
+    for name, (builder, kind) in charms.FIGURES.items():
+        M = builder(Lg, rail)
+        parts[f"charm_{name}"] = M
+        mount = charms.mount_back if kind == "back" else charms.mount_on_clip
+        d_c = derived(pc)
+
+        def coll(dz, M=M, mount=mount, dy=0.0):
+            return (mount(M, d_c["y_face"], rail.stop_len).translate([0, dy, dz]) ^ clip).volume()
+
+        slide = [coll(z) for z in np.linspace(0, 3.0, 11)]
+        fig_tests[name] = dict(kind=kind, seated_mm3=round(slide[0], 3), slide_max_mm3=round(max(slide), 3),
+                               past_stop_mm3=round(coll(-0.3), 3), pull_out_mm3=round(coll(0.0, dy=0.4), 3))
+        ft_ = fig_tests[name]
+        assert ft_["seated_mm3"] < 1e-3 and ft_["slide_max_mm3"] < 3.0 and ft_["past_stop_mm3"] > 0.3 \
+            and ft_["pull_out_mm3"] > 0.5, (name, ft_)
     if p.charm_stl:
         import trimesh
         tm = trimesh.load(p.charm_stl, force="mesh")
@@ -368,7 +385,8 @@ def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
         rep = check.report(tm, p.material)
         check.assert_printable(rep, bodies=len(p.charm_clears.split(",")) if name == "charm_fit_set" else 1)
         reports[name] = rep
-    summary = dict(params=asdict(p), groove_len_mm=round(Lg, 2), charm_test=ct, heart=hinfo, parts=reports)
+    summary = dict(params=asdict(p), groove_len_mm=round(Lg, 2), charm_test=ct, figure_tests=fig_tests,
+                   heart=hinfo, parts=reports)
     check.write(summary, str(cdir / "charms_report.json"))
     print({"charm_test": ct, **{k: (v["bbox_mm"], v["overhang_area_gt45deg_mm2"]) for k, v in reports.items()}})
     return summary
