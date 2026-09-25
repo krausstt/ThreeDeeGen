@@ -55,3 +55,13 @@ def test_masskrug_icons(tmp_path):
                          names=["heart", "pr0", "plug_3d"])
     for r in s["icons"].values():
         assert r["watertight"] and r["bodies"] == 1
+
+
+def test_masskrug_charms(tmp_path):
+    g = load("masskrug-marker")
+    ct = g.charm_test(g.Params())
+    assert ct["ok"], ct
+    s = g.generate_charms(g.Params(), tmp_path)
+    assert s["parts"]["charm_fit_set"]["bodies"] == 3
+    for name in ("clip_rail", "charm_plug", "charm_heart", "charm_blank"):
+        assert s["parts"][name]["watertight"] and s["parts"][name]["bodies"] == 1, name

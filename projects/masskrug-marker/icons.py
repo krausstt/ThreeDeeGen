@@ -368,28 +368,6 @@ def tungtung():
 
 
 # ------------------------------------------------------------------ the joke
-def plug_profile(L=10.0, flange_r=3.4, flange_t=1.2, neck_r=1.05, neck_l=1.6, bulb_r=2.45):
-    """(axial position, radius) of the plug from base (0) to tip (L): flange, neck, teardrop bulb."""
-    y = np.linspace(0, L, 120)
-    r = np.empty_like(y)
-    b0 = flange_t + neck_l
-    for i, t in enumerate(y):
-        if t < flange_t:
-            r[i] = flange_r
-        elif t < b0:
-            r[i] = neck_r
-        else:
-            u = (t - b0) / (L - b0)
-            r[i] = max(neck_r, bulb_r * math.sin(math.pi * u ** 0.62) ** 0.85) if u < 0.5 else \
-                max(bulb_r * math.sin(math.pi * u ** 0.62) ** 0.85, 0.35 * math.sqrt(max(1 - u, 0)) * 3)
-    return y, r
-
-def plug():
-    y, r = plug_profile(7.0)
-    pts = [(ri, yi) for yi, ri in zip(y, r)] + [(-ri, yi) for yi, ri in zip(y[::-1], r[::-1])]
-    return poly(pts).translate([0, -3.5])
-
-
 def get(name):
     return norm(ICONS[name][1]())
 
@@ -409,7 +387,6 @@ ICONS = {
     "pr0": ("pr0gramm", label("PR0")), "fliesentisch": ("pr0gramm", fliesentisch), "benis": ("pr0gramm", benis),
     "67": ("memes", label("67")), "stonks": ("memes", stonks), "penguin": ("memes", penguin),
     "spinner": ("memes", spinner), "labubu": ("memes", labubu), "tungtung": ("memes", tungtung),
-    "plug": ("joke", plug),
 }
 
 

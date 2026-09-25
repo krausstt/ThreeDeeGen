@@ -41,7 +41,7 @@ Die Dehnung ist nur eine Balken-Näherung, keine FEM. Die Plakette versteift ein
 
 ![Icons](out/icons/icons_sheet.png)
 
-40 Einzelmodelle als 3MF, Dateiname `masskrug_<kategorie>_<name>.3mf`. Übersicht: `out/icons/icons_sheet.png`, Prüfwerte: `out/icons/icons_report.json`.
+39 Einzelmodelle als 3MF, Dateiname `masskrug_<kategorie>_<name>.3mf`. Übersicht: `out/icons/icons_sheet.png`, Prüfwerte: `out/icons/icons_report.json`.
 
 | Kategorie | Icons |
 |---|---|
@@ -51,7 +51,7 @@ Die Dehnung ist nur eine Balken-Näherung, keine FEM. Die Plakette versteift ein
 | München | `frauenkirche`, `olympiaturm`, `kindl` (stilisiert), `arena` (Stadion-Silhouette), `089`, `muc` |
 | pr0gramm | `pr0` (Schriftzug, nicht das Logo), `fliesentisch`, `benis` (Plus im Kasten) |
 | Memes | `67`, `stonks`, `penguin` (Nihilistic Penguin, 2026), `spinner` („2026 is the new 2016“), `labubu`, `tungtung` |
-| Witz | `plug` (flach, ohne Stützen), `plug_3d` (plastisch, **braucht Stützen**) |
+| Witz | `plug_3d`: echter 3D-Plug direkt am Clip, **braucht Stützen** (siehe unten, Alternative: Plug-Charm ohne Stützen) |
 
 - **Technik:**
   - Motive sind 0,8 mm tief in die Plakette versenkt. Die Fläche dafür ist 10 × 7 mm groß.
@@ -61,18 +61,59 @@ Die Dehnung ist nur eine Balken-Näherung, keine FEM. Die Plakette versteift ein
   - Die Plakette steht beim Druck senkrecht. Waagerecht löst die Düse etwa 0,4 mm auf, senkrecht eine Schichthöhe. Mit einer 0,2-mm-Schicht werden feine Motive sauberer.
   - Der Blitz und die Antenne des Olympiaturms haben spitze Enden, die etwas verrunden.
 - **`plug_3d`:**
-  - Der Plug ist 11 mm lang, maximal Ø 4,9 mm, mit einem Fuß von Ø 6,8 mm. Er ragt waagerecht aus der Plakette.
-  - Im Slicer „Stützen: Baum, nur auf Druckbett“ einstellen. Gestützt wird nur die Unterseite der Kugel, etwa 2,5 mm hoch. Der Clip bleibt in der normalen Drucklage, so hält er beim Aufklipsen genauso gut.
+  - Echter Plug mit ovalem Fuß (10 × 7 mm), Hals Ø 2,6 mm und Kolben Ø 6,8 mm. Er ragt 16 mm waagerecht aus der Plakette.
+  - Im Slicer „Stützen: Baum, nur auf Druckbett“ einstellen. Der Clip bleibt in seiner normalen Drucklage.
 - **Bewusst nicht enthalten:**
   - Echte Vereins- und Markenlogos (FC Bayern, TSV 1860, BMW, Brauereien) und das pr0gramm-Logo. Sie sind markenrechtlich geschützt und landen hier in einem Repo.
   - Für den privaten Gebrauch lässt sich eine Hommage einfach in `icons.py` ergänzen.
 - **Neu erzeugen:**
 
 ```bash
-python3 projects/masskrug-marker/generate.py --symbol icons          # alle 40 nach out/icons/
+python3 projects/masskrug-marker/generate.py --symbol icons          # alle 39 nach out/icons/
 python3 projects/masskrug-marker/generate.py --symbol heart --out /tmp/x   # einzelnes Icon inkl. STL
 python3 projects/masskrug-marker/icon_sheet.py                       # Übersichtsbild
 ```
+
+## Charm-System (`out/charms/`)
+
+![Charms](out/charms/charms_overview.png)
+
+Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben lassen.
+
+- **Schiene:**
+  - Der Clip ist 12 mm lang, 2 mm länger als die Symbol-Clips.
+  - Die Schiene läuft entlang des Griffs. Sie ist am Fuß 3,0 mm breit, oben 4,6 mm und 1,6 mm hoch.
+  - Am bettseitigen Ende sitzt ein Anschlag, am anderen Ende eine 0,35 mm hohe Rastrampe.
+  - Beim Druck ist alles senkrecht extrudiert, es gibt keinen Überhang.
+- **Charm-Fuß:**
+  - 8,3 mm lang in Schieberichtung, mit einer Nut an der Unterseite, 0,2 mm Spiel je Seite.
+  - Er wird mit der Unterseite auf dem Bett gedruckt. Die Nutflanken stehen 63° steil, die Nutdecke ist eine 5-mm-Brücke.
+- **Funktionstest (automatisch):**
+
+| Prüfung | Ergebnis |
+|---|---|
+| Sitz in Endlage | 0 mm³ Kollision |
+| Abziehen um 0,4 mm | 1,5 mm³ Kollision, der Schwalbenschwanz hält |
+| 0,3 mm über den Anschlag hinaus | 1,4 mm³ Kollision, der Anschlag hält |
+| Seitlich 0,4 mm | 4,1 mm³ Kollision, kein Wackeln über das Spiel hinaus |
+| Rastrampe beim Aufschieben | max. 0,19 mm³ Überdeckung, das ist die Rastkraft. Ob sie in PETG reicht, zeigt erst der Druck. |
+
+| Datei | Inhalt | Druck |
+|---|---|---|
+| `masskrug_clip_rail.3mf` | Clip mit Schiene | wie alle Clips, ohne Stützen |
+| `masskrug_charm_plug.3mf` / `.stl` | Plug-Charm, 11 × 8,3 × 19 mm, Kolben Ø 8 mm | **stehend, ohne Stützen**: Kolbenunterseite 46,5° zur Waagerechten (Steigung 0,95), Hals Ø 3 mm |
+| `masskrug_charm_heart.3mf` | Herz-Charm, 12 mm breit | stehend. Das Herz wächst im 45°-Winkel aus dem Fuß, erst ab 2,1 mm Höhe, damit nichts am Anschlag anstößt. |
+| `masskrug_charm_blank.3mf` | leerer Fuß mit flacher Oberseite | zum Aufkleben eigener Minis |
+| `masskrug_charm_fit_set.3mf` | 3 leere Füße mit 0,15 / 0,2 / 0,3 mm Spiel (1 / 2 / 3 Punkte) | zuerst drucken |
+
+**Eigene Minifiguren:** Jedes wasserdichte STL oder 3MF, zum Beispiel von MakerWorld, wird automatisch skaliert (max. 14 × 14 × 22 mm), mittig auf einen Fuß gesetzt und verschmolzen:
+
+```bash
+python3 projects/masskrug-marker/generate.py --symbol charms --charm-stl pfad/zur/figur.stl
+# -> out/charms/masskrug_charm_custom.3mf
+```
+
+Überhänge der fremden Figur werden dabei nicht geprüft. Die Figur selbst kann also Stützen brauchen.
 
 ## Dateien (`out/`)
 

@@ -10,12 +10,16 @@
     "lip_r": 0.7,
     "edge_r": 0.8,
     "edge_c": 0.4,
-    "symbol": "icons",
+    "symbol": "circle",
     "badge_w": 12.0,
     "badge_h": 1.4,
     "symbol_depth": 0.8,
     "material": "PETG",
     "fit_grips": "0.2,0.4,0.6",
+    "charm_clip_w": 12.0,
+    "charm_clear": 0.2,
+    "charm_clears": "0.15,0.2,0.3",
+    "charm_stl": "",
     "gauge_ns": "2.0,2.5,3.0"
   },
   "functional_test": {
@@ -980,47 +984,22 @@
       "category": "memes",
       "needs_supports": false
     },
-    "plug": {
-      "watertight": true,
-      "winding_consistent": true,
-      "bodies": 1,
-      "faces": 13528,
-      "bbox_mm": [
-        22.29,
-        19.2,
-        10.0
-      ],
-      "volume_cm3": 1.156,
-      "material": "PETG",
-      "mass_g_at_100pct": 1.5,
-      "overhang_area_gt45deg_pct": 1.728,
-      "overhang_area_gt60deg_pct": 1.498,
-      "overhang_area_gt45deg_mm2": 23.0,
-      "icon_check": {
-        "area_mm2": 25.7,
-        "thin_recess_pct": 1.0,
-        "thin_wall_mm2": 0.31,
-        "inside_box": true
-      },
-      "category": "joke",
-      "needs_supports": false
-    },
     "plug_3d": {
       "watertight": true,
       "winding_consistent": true,
       "bodies": 1,
-      "faces": 20362,
+      "faces": 22170,
       "bbox_mm": [
         22.29,
-        29.8,
+        34.7,
         10.0
       ],
-      "volume_cm3": 1.295,
+      "volume_cm3": 1.529,
       "material": "PETG",
-      "mass_g_at_100pct": 1.6,
-      "overhang_area_gt45deg_pct": 2.949,
-      "overhang_area_gt60deg_pct": 2.087,
-      "overhang_area_gt45deg_mm2": 42.1,
+      "mass_g_at_100pct": 1.9,
+      "overhang_area_gt45deg_pct": 4.623,
+      "overhang_area_gt60deg_pct": 3.134,
+      "overhang_area_gt45deg_mm2": 72.1,
       "icon_check": {},
       "category": "joke",
       "needs_supports": true

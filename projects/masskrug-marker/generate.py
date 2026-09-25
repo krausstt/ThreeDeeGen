@@ -30,6 +30,7 @@ import manifold3d as m3  # noqa: E402
 from tdg import check, cli, mesh, render  # noqa: E402
 
 sys.path.insert(0, str(HERE))
+import charms  # noqa: E402
 import icons  # noqa: E402
 
 SEG = 160
@@ -62,6 +63,11 @@ class Params:
     # --- print
     material: str = "PETG"        # PETG: dishwasher/sun safer than PLA (Tg ~80 vs ~60 deg C)
     fit_grips: str = "0.2,0.4,0.6"
+    # --- charms
+    charm_clip_w: float = 12.0    # rail clips are 2 mm longer than symbol clips (room for the charm)
+    charm_clear: float = 0.2      # dovetail clearance per side
+    charm_clears: str = "0.15,0.2,0.3"
+    charm_stl: str = ""           # optional: any watertight STL/3MF to fuse onto a charm base
     gauge_ns: str = "2.0,2.5,3.0"
 
 
@@ -170,6 +176,8 @@ def build_clip(p: Params, symbol=None, dimples=0):
     body = rounded_extrude(clip2d(p, d, badge=True), p.clip_w, p.edge_r, p.edge_c)
     if symbol == "plug_3d":
         body += plug_3d(p, d)
+    elif symbol == "rail":
+        body += charms.rail_on_clip(d["y_face"], p.clip_w, charms.Rail(clear=p.charm_clear))
     elif symbol in icons.ICONS:
         body -= face_cut(p, d, icons.get(symbol), p.symbol_depth)
     elif symbol != "plain":
@@ -179,12 +187,16 @@ def build_clip(p: Params, symbol=None, dimples=0):
     return body, d
 
 
-def plug_3d(p: Params, d, L=11.0):
-    """Revolved plug standing out of the badge (+Y). Lies horizontally in print pose -> needs supports."""
-    y, r = icons.plug_profile(L=L)
-    pts = [(0.0, 0.0)] + [(float(ri), float(yi)) for yi, ri in zip(y, r)] + [(0.0, L)]
-    solid = m3.CrossSection([pts]).revolve(96)                    # axis = Z
-    return solid.rotate([-90, 0, 0]).translate([0, d["y_face"] - 0.4, p.clip_w / 2])
+PLUG_ON_CLIP = charms.Plug(length=14.0, neck_r=1.3, neck_l=1.8, bulb_r=3.4)
+
+
+def plug_3d(p: Params, d):
+    """Real 3D plug (oval flange, neck, bulb) standing out of the badge (+Y).
+    Horizontal in the print pose -> needs (tree) supports under the bulb."""
+    fl_t = 1.8
+    local = charms.plug_flange(width=10.0, depth=min(7.0, p.clip_w - 2.0), t=fl_t) \
+        + charms.plug_body(PLUG_ON_CLIP).translate([0, 0, fl_t])
+    return charms.mount_on_clip(local, d["y_face"] - 0.3, p.clip_w / 2)
 
 
 def build_gauge(p: Params):
@@ -248,6 +260,8 @@ def generate(p: Params, out_dir: Path, previews=True):
     reports = {}
     if p.symbol == "icons":
         return generate_icons(p, out_dir, d, ft)
+    if p.symbol == "charms":
+        return generate_charms(p, out_dir)
     names = SYMBOLS if p.symbol == "all" else (p.symbol,)
     plate = m3.Manifold()
     for i, s in enumerate(names):
@@ -293,6 +307,70 @@ def generate_icons(p: Params, out_dir: Path, d, ft, names=None, simplify_eps=0.0
     summary = dict(params=asdict(p), functional_test=ft, icons=reports)
     check.write(summary, str(idir / "icons_report.json"))
     print({n: (r["category"], r["bbox_mm"], r["overhang_area_gt45deg_mm2"]) for n, r in reports.items()})
+    return summary
+
+
+def charm_test(p: Params):
+    """Slide / seat / retention test of a charm on the rail clip (collision volumes in mm^3)."""
+    pc = replace(p, clip_w=p.charm_clip_w)
+    d = derived(pc)
+    rail = charms.Rail(clear=p.charm_clear)
+    clip, _ = build_clip(pc, "rail")
+    Lg = charms.groove_len(pc.clip_w, rail)
+    ch = charms.charm_blank(Lg, rail)
+
+    def at(dy=0.0, dz=0.0, dx=0.0):
+        return (charms.mount_on_clip(ch, d["y_face"], rail.stop_len).translate([dx, dy, dz]) ^ clip).volume()
+
+    slide = [round(at(dz=z), 3) for z in np.linspace(0, 2.6, 14)]
+    res = dict(groove_len_mm=round(Lg, 2), seated_mm3=round(at(), 3),
+               pull_out_0p4_mm3=round(at(dy=0.4), 3),          # > 0: dovetail undercut holds
+               push_past_stop_0p3_mm3=round(at(dz=-0.3), 3),   # > 0: stop block works
+               lateral_0p4_mm3=round(at(dx=0.4), 3),           # > 0: no lateral wobble beyond clearance
+               detent_slide_mm3=slide, detent_peak_mm3=max(slide))
+    res["ok"] = bool(res["seated_mm3"] < 1e-3 and res["pull_out_0p4_mm3"] > 0.5 and res["push_past_stop_0p3_mm3"] > 0.5
+                     and res["lateral_0p4_mm3"] > 0.1 and 0.05 < res["detent_peak_mm3"] < 3.0)
+    return res
+
+
+def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
+    """Rail clip + charms (plug, heart, blank, optional custom STL) + clearance test set."""
+    cdir = out_dir / "charms"
+    cdir.mkdir(parents=True, exist_ok=True)
+    pc = replace(p, clip_w=p.charm_clip_w)
+    rail = charms.Rail(clear=p.charm_clear)
+    Lg = charms.groove_len(pc.clip_w, rail)
+    ct = charm_test(p)
+    assert ct["ok"], f"charm test failed: {ct}"
+    heart, hinfo = charms.charm_heart(Lg, rail)
+    parts = {
+        "clip_rail": build_clip(pc, "rail")[0],
+        "charm_plug": charms.charm_plug(Lg, rail),
+        "charm_heart": heart,
+        "charm_blank": charms.charm_blank(Lg, rail),
+    }
+    if p.charm_stl:
+        import trimesh
+        tm = trimesh.load(p.charm_stl, force="mesh")
+        parts["charm_custom"], scale = charms.charm_from_mesh(Lg, tm, rail)
+        print(f"  custom charm scaled by {scale:.3f}")
+    fit = m3.Manifold()
+    for i, c in enumerate(float(x) for x in p.charm_clears.split(",")):
+        b = charms.charm_blank(Lg, charms.Rail(clear=c))
+        for k in range(i + 1):                             # id dots on the top
+            b -= m3.Manifold.cylinder(1.0, 0.7, 0.7, 24).translate([(k - i / 2) * 2.2, Lg / 2, 2.4])
+        fit += b.translate([i * 14.0, 0, 0])
+    parts["charm_fit_set"] = fit
+    reports = {}
+    for name, M in parts.items():
+        tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
+        mesh.export(tm, str(cdir / f"masskrug_{name}"), formats=("3mf", "stl") if name == "charm_plug" else ("3mf",))
+        rep = check.report(tm, p.material)
+        check.assert_printable(rep, bodies=len(p.charm_clears.split(",")) if name == "charm_fit_set" else 1)
+        reports[name] = rep
+    summary = dict(params=asdict(p), groove_len_mm=round(Lg, 2), charm_test=ct, heart=hinfo, parts=reports)
+    check.write(summary, str(cdir / "charms_report.json"))
+    print({"charm_test": ct, **{k: (v["bbox_mm"], v["overhang_area_gt45deg_mm2"]) for k, v in reports.items()}})
     return summary
 
 
