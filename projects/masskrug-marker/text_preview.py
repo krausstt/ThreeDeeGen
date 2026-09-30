@@ -29,7 +29,7 @@ def main(out):
         draw(ax, m, shade(m, light=(-0.5, 0.8, 0.9)), 20, 115, zoom=1.5)
         ax.set_title(t, fontsize=10)
         ax = fig.add_subplot(2, n, n + i + 1)
-        cs, L, _ = T.text2d(t, info["cap_height_mm"], p.text_stroke)
+        cs, L, _ = T.layout_text(t, info["font"], info["cap_height_mm"])
         v, c = [], []
         for poly in cs.to_polygons():
             pts = [tuple(q) for q in poly]
@@ -40,7 +40,8 @@ def main(out):
         ax.set_ylim(-1, 8)
         ax.set_aspect("equal")
         ax.axis("off")
-        ax.set_title(f"abgewickelt {L:.1f} mm, {info['wrap_deg']:.0f}°", fontsize=8)
+        ax.set_title(f"{info['font']}: {info['cap_height_mm']:.1f} mm hoch, {L:.1f} mm lang, "
+                     f"{info['wrap_deg']:.0f}°", fontsize=8)
     plt.tight_layout()
     fig.savefig(out, dpi=80)
 

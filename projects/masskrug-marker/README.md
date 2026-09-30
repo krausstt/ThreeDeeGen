@@ -143,34 +143,44 @@ python3 projects/masskrug-marker/generate.py --symbol charms --charm-stl pfad/zu
 
 ![Text-Ringe](out/text/text_overview.png)
 
-Dritte Variante: ein schlichter C-Ring ohne Plakette, mit Text rundum eingraviert.
+Dritte Variante: ein schlichter C-Ring ohne Plakette, mit Text rundum eingraviert (v2: echte Schriften, tiefere Gravur).
 
 - **Ring:**
-  - 12 mm hoch, Wand 2,4 mm statt 2,0 mm, weil die Gravur 0,7 mm tief geht. Unter der Gravur bleiben 1,7 mm.
-  - Gleiche Klemmgeometrie wie alle Clips. Die Aufklips-Dehnung steigt durch die dickere Wand auf ≈ 1,0 % (Näherung). Das liegt weiter deutlich unter der Grenze.
-- **Text:**
-  - Eigene Strichschrift, Versalhöhe 6,5 mm, Strichbreite 0,9 mm. Darüber und darunter bleibt je mindestens 1 mm Rand.
-  - Der Text wird entlang der gekrümmten Außenfläche abgewickelt und steht auf der Außenseite des Henkelbogens. Ist er dafür zu lang, wandert er Richtung Rückseite, aber nie in die Klipslippen.
-  - Er liest sich von außen richtig herum. Die Buchstaben stehen aufrecht, wenn der Ring am senkrechten Griffteil sitzt.
-- **Druck:** Wie alle Clips flach liegend, ohne Stützen. Waagerechte Buchstabenstriche sind 0,7 mm tiefe Rillen in einer senkrechten Wand, das ist unkritisch.
+  - 12 mm hoch, Wand 2,8 mm. Die Gravur ist **1,2 mm tief** (v1: 0,7 mm), darunter bleiben 1,6 mm.
+  - Gleiche Klemmgeometrie wie alle Clips. Die Aufklips-Dehnung steigt durch die dickere Wand auf ≈ 1,1 % (Näherung), weiter unter der Grenze von 1,5 %.
+- **Schriften** (liegen in `tdg/fonts/`, alle unter SIL Open Font License 1.1, Lizenztexte daneben):
+  - `outfit`: Outfit Bold, geometrische Sans, Standard
+  - `bigshoulders`: Big Shoulders Bold, schmal, für lange Texte
+  - `nationalpark`: National Park Bold, Beschilderungs-Stil
+  - `stroke`: die alte eingebaute Strichschrift
+  - oder ein beliebiger Pfad zu einer .ttf/.otf-Datei
+- **Automatische Wahl (`--text-font auto`):**
+  - Outfit wird genommen, solange der Text mindestens 5,5 mm hoch passt und höchstens 150° um den Ring läuft. Sonst wird Big Shoulders verwendet.
+  - Versalhöhe höchstens 6,5 mm. Die Höhe wird so gewählt, dass Umlaute und Unterlängen noch in die Ringhöhe passen, mit je mindestens 1 mm Rand.
+  - Kerning wird nicht angewendet.
+- **Layout:**
+  - Der Text wird entlang der gekrümmten Außenfläche abgewickelt und sitzt auf der Außenseite des Henkelbogens. Ist er dafür zu lang, wandert er Richtung Rückseite, aber nie in die Klipslippen.
+  - Er liest sich von außen richtig herum.
+- **Druck:** Wie alle Clips flach liegend, ohne Stützen. Die Decken der 1,2 mm tiefen Buchstabenrillen sind kurze Überhänge in einer senkrechten Wand. Das schafft der A1 mini, bei Kanten mit schwachem Überhang können sie leicht ausfransen.
 
-| Datei | Text | abgewickelte Länge | Umschlingung |
-|---|---|---|---|
-| `masskrug_text_bavaria.3mf` | BAVARIA | 27,7 mm | 136° |
-| `masskrug_text_o_zapft_is.3mf` | O'ZAPFT IS | 36,9 mm | 184° |
-| `masskrug_text_munich.3mf` | MUNICH | 23,2 mm | 112° |
-| `masskrug_text_muc.3mf` | MUC | 12,6 mm | 59° |
-| `masskrug_text_wiesn.3mf` | WIESN | 20,2 mm | 96° |
-| `masskrug_text_markus.3mf` | MARKUS | 26,1 mm | 127° |
-| `masskrug_text_fcb.3mf` | FCB | 12,6 mm | 59° |
-| `masskrug_text_bbc.3mf` | BBC | 12,6 mm | 59° |
+| Datei | Text | Schrift | abgewickelt | Umlauf |
+|---|---|---|---|---|
+| `masskrug_text_bavaria.3mf` | BAVARIA | Big Shoulders | 26,4 mm | 125° |
+| `masskrug_text_o_zapft_is.3mf` | O'ZAPFT IS | Big Shoulders | 32,9 mm | 158° |
+| `masskrug_text_munich.3mf` | MUNICH | Big Shoulders | 25,6 mm | 121° |
+| `masskrug_text_muc.3mf` | MUC | Outfit | 20,7 mm | 96° |
+| `masskrug_text_wiesn.3mf` | WIESN | Outfit | 30,4 mm | 145° |
+| `masskrug_text_markus.3mf` | MARKUS | Big Shoulders | 26,7 mm | 126° |
+| `masskrug_text_fcb.3mf` | FCB | Outfit | 17,5 mm | 80° |
+| `masskrug_text_bbc.3mf` | BBC | Outfit | 18,1 mm | 83° |
 
-- **Kapazität:** Die nutzbare Bogenlänge beträgt 47,7 mm. Bei 6,5 mm Versalhöhe passen etwa 10 Zeichen. Längere Texte werden bis auf 4,2 mm Versalhöhe verkleinert, noch längere bricht der Generator mit einer Meldung ab.
-- **Verfügbare Zeichen:** A–Z, 0–9, Apostroph, Bindestrich, Leerzeichen. Umlaute fehlen, dafür AE, OE, UE schreiben: Pünktchen über 6,5-mm-Versalien passen nicht in die Ringhöhe.
+- **Zeichen:** alles, was die Schrift enthält, inklusive Ä Ö Ü ß und Kleinbuchstaben.
+- **Zu lange Texte:** Bis 4,2 mm Versalhöhe wird verkleinert, danach bricht der Generator mit einer Meldung ab.
 - **Eigene Texte:**
 
 ```bash
-python3 projects/masskrug-marker/generate.py --symbol texts --texts "SEPP|RESI|PROST"
+python3 projects/masskrug-marker/generate.py --symbol texts --texts "Sepp|Resi|PROST|Grüß Gott"
+python3 projects/masskrug-marker/generate.py --symbol texts --text-font nationalpark --text-depth 1.0
 python3 projects/masskrug-marker/text_preview.py        # Übersichtsbild
 ```
 
