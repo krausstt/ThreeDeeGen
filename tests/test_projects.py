@@ -65,3 +65,15 @@ def test_masskrug_charms(tmp_path):
     assert s["parts"]["charm_fit_set"]["bodies"] == 3
     for name in ("clip_rail", "charm_plug", "charm_heart", "charm_blank"):
         assert s["parts"][name]["watertight"] and s["parts"][name]["bodies"] == 1, name
+
+
+def test_masskrug_text_rings(tmp_path):
+    import pytest
+    g = load("masskrug-marker")
+    s = g.generate_texts(g.Params(texts="O'ZAPFT IS|MUC"), tmp_path)
+    assert s["functional_test"]["ok"]
+    for r in s["texts"].values():
+        assert r["watertight"] and r["bodies"] == 1
+        assert r["text"]["cap_height_mm"] >= 4.2 and r["text"]["min_feature_loss_pct"] < 5
+    with pytest.raises(ValueError):
+        g.build_text_ring(g.Params(), "DAS IST VIEL ZU LANG FUER DEN RING")

@@ -32,6 +32,7 @@ from tdg import check, cli, mesh, render  # noqa: E402
 sys.path.insert(0, str(HERE))
 import charms  # noqa: E402
 import icons  # noqa: E402
+import textring  # noqa: E402
 
 SEG = 160
 SYMBOLS = ("plain", "circle", "square", "triangle", "diamond", "cross", "star", "heart")
@@ -67,7 +68,13 @@ class Params:
     charm_clip_w: float = 12.0    # rail clips are 2 mm longer than symbol clips (room for the charm)
     charm_clear: float = 0.2      # dovetail clearance per side
     charm_clears: str = "0.15,0.2,0.3"
-    charm_stl: str = ""           # optional: any watertight STL/3MF to fuse onto a charm base
+    charm_stl: str = ""
+    # --- text rings
+    texts: str = "BAVARIA|O'ZAPFT IS|MUNICH|MUC|WIESN|MARKUS|FCB|BBC"   # '|' separated
+    text_clip_w: float = 12.0     # ring height along the handle (room for ~6 mm letters)
+    text_band_t: float = 2.4      # thicker wall: the engraving takes 0.7 mm
+    text_depth: float = 0.7
+    text_stroke: float = 0.9           # optional: any watertight STL/3MF to fuse onto a charm base
     gauge_ns: str = "2.0,2.5,3.0"
 
 
@@ -262,6 +269,8 @@ def generate(p: Params, out_dir: Path, previews=True):
         return generate_icons(p, out_dir, d, ft)
     if p.symbol == "charms":
         return generate_charms(p, out_dir)
+    if p.symbol == "texts":
+        return generate_texts(p, out_dir)
     names = SYMBOLS if p.symbol == "all" else (p.symbol,)
     plate = m3.Manifold()
     for i, s in enumerate(names):
@@ -387,6 +396,41 @@ def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
                    parts=reports)
     check.write(summary, str(cdir / "charms_report.json"))
     print({"charm_test": ct, **{k: (v["bbox_mm"], v["overhang_area_gt45deg_mm2"]) for k, v in reports.items()}})
+    return summary
+
+
+def build_text_ring(p: Params, text):
+    """Plain C-ring (no badge) with `text` engraved around the outside."""
+    pt = replace(p, clip_w=p.text_clip_w, band_t=p.text_band_t)
+    d = derived(pt)
+    ring = rounded_extrude(clip2d(pt, d, badge=False), pt.clip_w, pt.edge_r, pt.edge_c)
+    tool, info, cs = textring.text_ring_cut(d["ai"], d["bi"], pt.band_t, d["gap"], pt.clip_w, text,
+                                            depth=p.text_depth, w=p.text_stroke)
+    info["min_feature_loss_pct"] = round(100 * (cs - cs.offset(-0.35, m3.JoinType.Round).offset(
+        0.35, m3.JoinType.Round)).area() / cs.area(), 1)
+    return ring - tool, info, pt, d
+
+
+def generate_texts(p: Params, out_dir: Path, simplify_eps=0.005):
+    tdir = out_dir / "text"
+    tdir.mkdir(parents=True, exist_ok=True)
+    pt = replace(p, clip_w=p.text_clip_w, band_t=p.text_band_t)
+    ft = functional_test(pt, derived(pt))
+    assert ft["ok"], f"functional test failed for the thicker text ring: {ft}"
+    assert p.text_band_t - p.text_depth >= 1.6, "wall under the engraving too thin"
+    reports = {}
+    for text in [t for t in p.texts.split("|") if t.strip()]:
+        M, info, _, _ = build_text_ring(p, text)
+        tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
+        mesh.export(tm, str(tdir / f"masskrug_text_{textring.slug(text)}"), formats=("3mf",))
+        rep = check.report(tm, p.material)
+        check.assert_printable(rep)
+        rep["text"] = info
+        reports[text] = rep
+    summary = dict(params=asdict(p), functional_test=ft, texts=reports)
+    check.write(summary, str(tdir / "text_report.json"))
+    print({t: (r["text"]["cap_height_mm"], r["text"]["length_mm"], r["text"]["wrap_deg"], r["bbox_mm"])
+           for t, r in reports.items()})
     return summary
 
 

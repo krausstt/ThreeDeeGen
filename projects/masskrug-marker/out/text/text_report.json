@@ -1,0 +1,275 @@
+{
+  "params": {
+    "bar_w": 22.9,
+    "bar_t": 14.6,
+    "profile_n": 2.0,
+    "grip": 0.4,
+    "band_t": 2.0,
+    "clip_w": 10.0,
+    "gap_ratio": 0.72,
+    "lip_r": 0.7,
+    "edge_r": 0.8,
+    "edge_c": 0.4,
+    "symbol": "texts",
+    "badge_w": 12.0,
+    "badge_h": 1.4,
+    "symbol_depth": 0.8,
+    "material": "PETG",
+    "fit_grips": "0.2,0.4,0.6",
+    "charm_clip_w": 12.0,
+    "charm_clear": 0.2,
+    "charm_clears": "0.15,0.2,0.3",
+    "charm_stl": "",
+    "texts": "BAVARIA|O'ZAPFT IS|MUNICH|MUC|WIESN|MARKUS|FCB|BBC",
+    "text_clip_w": 12.0,
+    "text_band_t": 2.4,
+    "text_depth": 0.7,
+    "text_stroke": 0.9,
+    "gauge_ns": "2.0,2.5,3.0"
+  },
+  "functional_test": {
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 1.01,
+    "yield_strain_pct": 2.5,
+    "min_wall_mm": 2.4,
+    "wrap_deg": 260.5,
+    "ok": true
+  },
+  "texts": {
+    "BAVARIA": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 16012,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.399,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.883,
+      "overhang_area_gt60deg_pct": 1.73,
+      "overhang_area_gt45deg_mm2": 31.3,
+      "text": {
+        "text": "BAVARIA",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 27.7,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 136.2,
+        "centred_on_outer_face": false,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "O'ZAPFT IS": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 16332,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.399,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 2.315,
+      "overhang_area_gt60deg_pct": 2.13,
+      "overhang_area_gt45deg_mm2": 38.7,
+      "text": {
+        "text": "O'ZAPFT IS",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 36.9,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 184.0,
+        "centred_on_outer_face": false,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "MUNICH": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 15218,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.409,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.651,
+      "overhang_area_gt60deg_pct": 1.549,
+      "overhang_area_gt45deg_mm2": 27.2,
+      "text": {
+        "text": "MUNICH",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 23.2,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 112.3,
+        "centred_on_outer_face": false,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "MUC": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14410,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.432,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.476,
+      "overhang_area_gt60deg_pct": 1.42,
+      "overhang_area_gt45deg_mm2": 23.6,
+      "text": {
+        "text": "MUC",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 12.6,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 58.7,
+        "centred_on_outer_face": true,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "WIESN": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 15332,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.417,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.729,
+      "overhang_area_gt60deg_pct": 1.596,
+      "overhang_area_gt45deg_mm2": 28.2,
+      "text": {
+        "text": "WIESN",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 20.2,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 96.1,
+        "centred_on_outer_face": false,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "MARKUS": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 16046,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.403,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.791,
+      "overhang_area_gt60deg_pct": 1.634,
+      "overhang_area_gt45deg_mm2": 29.7,
+      "text": {
+        "text": "MARKUS",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 26.1,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 127.3,
+        "centred_on_outer_face": false,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "FCB": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14528,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.434,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.77,
+      "overhang_area_gt60deg_pct": 1.702,
+      "overhang_area_gt45deg_mm2": 28.2,
+      "text": {
+        "text": "FCB",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 12.6,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 58.7,
+        "centred_on_outer_face": true,
+        "min_feature_loss_pct": 0.1
+      }
+    },
+    "BBC": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 14594,
+      "bbox_mm": [
+        23.41,
+        18.6,
+        12.0
+      ],
+      "volume_cm3": 1.43,
+      "material": "PETG",
+      "mass_g_at_100pct": 1.8,
+      "overhang_area_gt45deg_pct": 1.771,
+      "overhang_area_gt60deg_pct": 1.692,
+      "overhang_area_gt45deg_mm2": 28.3,
+      "text": {
+        "text": "BBC",
+        "cap_height_mm": 6.5,
+        "stroke_mm": 0.9,
+        "depth_mm": 0.7,
+        "length_mm": 12.6,
+        "usable_arc_mm": 53.1,
+        "ring_perimeter_mm": 72.2,
+        "wrap_deg": 58.7,
+        "centred_on_outer_face": true,
+        "min_feature_loss_pct": 0.1
+      }
+    }
+  }
+}
