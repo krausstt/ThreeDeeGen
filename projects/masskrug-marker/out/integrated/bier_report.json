@@ -1,0 +1,41 @@
+{
+  "watertight": true,
+  "winding_consistent": true,
+  "bodies": 1,
+  "faces": 26388,
+  "bbox_mm": [
+    25.65,
+    21.4,
+    18.2
+  ],
+  "volume_cm3": 2.125,
+  "material": "PETG",
+  "mass_g_at_100pct": 2.7,
+  "overhang_area_gt45deg_pct": 3.851,
+  "overhang_area_gt60deg_pct": 2.36,
+  "overhang_area_gt45deg_mm2": 83.6,
+  "bier": {
+    "diameter_mm": 20.0,
+    "width_with_banner_mm": 25.2,
+    "plate_t_mm": 1.6,
+    "relief_h_mm": 0.6,
+    "engrave_mm": 0.5,
+    "banner_text_cap_mm": 2.2,
+    "banner_text_len_mm": 18.1,
+    "city_text_cap_mm": 2.0,
+    "flank_deg_to_horizontal": 50.0,
+    "banner_tip_h_mm": 0.68,
+    "groove_loss_pct_at_0_4mm": 1.0
+  },
+  "functional_test": {
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 0.87,
+    "yield_strain_pct": 2.5,
+    "min_wall_mm": 2.0,
+    "wrap_deg": 260.5,
+    "ok": true
+  }
+}

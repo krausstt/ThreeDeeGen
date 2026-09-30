@@ -1,20 +1,13 @@
 """
-Clip with an integrated charm: two interlocking wedding rings.
+Clip with integrated wedding rings as a RELIEF (v2).
 
-Both rings stand upright on the bed (ring planes vertical, i.e. containing the print Z axis), so they print
-without supports: their bottoms are flattened 0.3 mm into the bed, the inner top of each ring is a round
-arch (self supporting at these sizes). Ring A ("his", larger) stands perpendicular to the badge and is fused
-into it; ring B ("hers", smaller) stands parallel to the badge and is threaded through A.
+v1 (two upright 3D rings, fused) failed in practice: thin free-standing arches on a 12 mm clip are fragile and
+hard to print. v2 is 2.5D: two overlapping ring bands in the badge plane, raised as a relief with tapered
+(>= 50 deg) flanks, fused over their full footprint into the badge. The interlock is shown graphically by
+over/under crossings: at the upper crossing A runs over B, at the lower crossing B runs over A (the band
+underneath is interrupted by a small gap), so the pair reads as linked. Ring B carries a small stone on top.
 
-Linking: A lies in the plane x = xa, B in the plane y = yb. Along their common vertical line the two
-crossing heights of each ring must interleave; `link_check` verifies that numerically.
-
-Only a fused variant exists: B touches A at the crossing (one rigid body). A print-in-place loose ring is
-geometrically impossible here: with both rings standing on the bed their crossings are too close; the best
-linked placement reaches 0.78 mm centre-line distance for 1.4 mm thick bands (a free ring would need
-supports inside the other ring).
-
-Ring B carries a small brilliant (45 deg pavilion, flat table) on top.
+Local frame of the relief: (u, v) in the badge plane, h = height above the badge face.
 """
 from __future__ import annotations
 
@@ -26,87 +19,61 @@ import manifold3d as m3
 SEG = 128
 
 
-def band_profile(r_mean, width, thick, n=2.6):
-    """Superellipse ring cross-section (comfort-fit look), centred at radius r_mean."""
-    t = np.linspace(0, 2 * np.pi, 64, endpoint=False)
-    c, s = np.cos(t), np.sin(t)
-    x = r_mean + thick / 2 * np.sign(c) * np.abs(c) ** (2 / n)
-    y = width / 2 * np.sign(s) * np.abs(s) ** (2 / n)
-    return m3.CrossSection([np.c_[x, y].tolist()])
+def ring_band(c, r, w):
+    outer = m3.CrossSection.circle(r + w / 2, SEG).translate(list(c))
+    inner = m3.CrossSection.circle(r - w / 2, SEG).translate(list(c))
+    return outer - inner
 
 
-def band(r_mean, width, thick):
-    """Ring with axis along Z (revolve), lying in the XY plane."""
-    return band_profile(r_mean, width, thick).revolve(SEG)
+def rings2d(R=2.95, d=1.85, w=2.2, gap=0.45, stone=0.75):
+    """Two linked ring bands (centres +-d on u) with over/under crossing gaps + a stone on ring B."""
+    ca, cb = np.array([-d, 0.0]), np.array([d, 0.0])
+    A, B = ring_band(ca, R, w), ring_band(cb, R, w)
+    zc = math.sqrt(R**2 - d**2)                              # crossings at (0, +-zc)
+    win = 1.25 * w
+    top = m3.CrossSection.circle(win, 48).translate([0, zc])
+    bot = m3.CrossSection.circle(win, 48).translate([0, -zc])
+    A_cut = A - (B.offset(gap, m3.JoinType.Round) ^ bot)     # lower crossing: B over A
+    B_cut = B - (A.offset(gap, m3.JoinType.Round) ^ top)     # upper crossing: A over B
+    gem = m3.CrossSection.square([stone * 2] * 2, True).rotate(45).translate([cb[0], R + w / 2 + stone * 0.55])
+    bands = A_cut + B_cut + gem
+    info = dict(ring_r_mm=R, band_w_mm=w, centre_dist_mm=2 * d, crossing_gap_mm=gap,
+                span_u_mm=round(2 * (d + R + w / 2), 2), span_v_mm=round(2 * (R + w / 2) + stone * 1.3, 2))
+    return bands, info
 
 
-def ring_points(center, r, plane, n=720):
-    t = np.linspace(0, 2 * np.pi, n, endpoint=False)
-    c = np.asarray(center, float)
-    if plane == "yz":
-        return np.c_[np.full(n, c[0]), c[1] + r * np.cos(t), c[2] + r * np.sin(t)]
-    return np.c_[c[0] + r * np.cos(t), np.full(n, c[1]), c[2] + r * np.sin(t)]
+def relief(cs, h=1.1, flank_deg=50.0, embed=0.3, dz=0.05, soften=0.08):
+    """2.5D relief printed SIDEWAYS: the badge is vertical, h grows along +Y, v is the print Z axis.
+    Downward-facing edges (-v) would be ceilings, so each layer at height t is cs intersected with cs shifted
+    up by t / tan(flank_deg): every downward flank then rises at flank_deg to the horizontal, upward and
+    side flanks stay near vertical (self supporting). The embedded part (below the badge face) is prismatic."""
+    parts = []
+    k_tan = 1 / math.tan(math.radians(flank_deg))
+    n = int(round((h + embed) / dz))
+    prev = cs
+    for k in range(n):
+        t = max((k + 0.5) * dz - embed, 0.0)
+        # cumulative intersection keeps every layer inside the one below (no floating islands)
+        layer = prev ^ cs.translate([0, t * k_tan]).offset(-soften * t / h, m3.JoinType.Round)
+        layer = m3.CrossSection.compose([c for c in layer.decompose() if c.area() > 0.25])
+        if layer.is_empty():
+            break
+        prev = layer
+        parts.append(layer.extrude(dz * 1.5).translate([0, 0, k * dz - embed]))   # overlap -> fused layers
+    clip = m3.Manifold.cube([99, 99, h + embed]).translate([-49.5, -49.5, -embed])     # trim the 1.5x overlap
+    return m3.Manifold.batch_boolean(parts, m3.OpType.Add) ^ clip
 
 
-def link_check(ca, ra, cb, rb):
-    """A in plane x = ca.x (YZ), B in plane y = cb.y (XZ). Linked iff their crossings on the common
-    vertical line (x = ca.x, y = cb.y) interleave."""
-    dy = cb[1] - ca[1]
-    dx = ca[0] - cb[0]
-    if abs(dy) >= ra or abs(dx) >= rb:
-        return False
-    sa = math.sqrt(ra**2 - dy**2)
-    sb = math.sqrt(rb**2 - dx**2)
-    a = sorted([ca[2] - sa, ca[2] + sa])
-    b = sorted([cb[2] - sb, cb[2] + sb])
-    inside = [a[0] < z < a[1] for z in b]
-    return inside[0] != inside[1]
+def on_badge(M_uvh, y_face, clip_w):
+    """(u, v, h) -> clip (x = -u, y = y_face + h, z = clip_w/2 + v); det = +1."""
+    return M_uvh.transform([[-1, 0, 0, 0], [0, 0, 1, y_face], [0, 1, 0, clip_w / 2]])
 
 
-def build_rings(y_face, clip_w, variant="fused", Ra=5.6, Rb=4.5, wa=2.4, ta=1.5, wb=2.1, tb=1.3,
-                sink=0.3, overlap=0.3, gap=0.5, gem=True, yaw=35.0, embed=1.1):
-    """Return (rings manifold in clip coordinates, info). Clip frame: badge normal +Y, z = along handle (bed)."""
-    Ra_out, Rb_out = Ra + ta / 2, Rb + tb / 2
-    ca = np.array([-1.3, y_face + Ra_out - 1.1, Ra_out - sink])        # A cuts 1.1 mm into the badge
-    zb = Rb_out - sink
-    # B: plane y = yb, centre x = xb. Search the placement whose closest centre-line distance hits the
-    # target (touching with overlap, or clear by `gap`) while staying linked.
-    target = (ta + tb) / 2 - overlap if variant == "fused" else (ta + tb) / 2 + gap
-    pa = ring_points(ca, Ra, "yz")
-    best = None
-    for yb in np.linspace(ca[1] + 0.6, ca[1] + Ra - 0.8, 25):
-        for xb in np.linspace(ca[0] + 0.5, ca[0] + Rb - 0.3, 40):
-            cb = np.array([xb, yb, zb])
-            if not link_check(ca, Ra, cb, Rb):
-                continue
-            pb = ring_points(cb, Rb, "xz", 360)
-            dmin = np.min(np.linalg.norm(pa[:, None, :] - pb[None, :, :], axis=-1))
-            score = abs(dmin - target) + 0.02 * abs(yb - (ca[1] + 0.5 * Ra))
-            if best is None or score < best[0]:
-                best = (score, cb, dmin)
-    assert best is not None, "no linked placement found"
-    _, cb, dmin = best
-    A = band(Ra, wa, ta).rotate([0, 90, 0]).translate(list(ca))             # axis X -> plane YZ
-    B = band(Rb, wb, tb).rotate([90, 0, 0]).translate(list(cb))             # axis Y -> plane XZ
-    bed = m3.Manifold.cube([200, 200, 200], True).translate([0, 0, 100])
-    A, B = A ^ bed, B ^ bed
-    if gem:
-        top = cb + np.array([0, 0, Rb + tb / 2 - 0.25])
-        pav = m3.Manifold.cylinder(1.0, 0.25, 1.25, 8).translate(list(top))            # 45 deg pavilion
-        crown = m3.Manifold.cylinder(0.55, 1.25, 0.75, 8).translate(list(top + [0, 0, 1.0]))
-        B = B + pav + crown
-    # turn the pair about the vertical axis so both rings show from the front, then re-seat A in the badge
-    if yaw:
-        piv = [ca[0], ca[1], 0]
-        A = A.translate([-piv[0], -piv[1], 0]).rotate([0, 0, yaw]).translate(piv)
-        B = B.translate([-piv[0], -piv[1], 0]).rotate([0, 0, yaw]).translate(piv)
-        dy = (y_face - embed) - A.bounding_box()[1]
-        A, B = A.translate([0, dy, 0]), B.translate([0, dy, 0])
-    info = dict(variant=variant, yaw_deg=yaw,
-                ring_a=dict(center=np.round(ca, 2).tolist(), r_mean=Ra, width=wa, thick=ta),
-                ring_b=dict(center=np.round(cb, 2).tolist(), r_mean=Rb, width=wb, thick=tb),
-                linked=bool(link_check(ca, Ra, cb, Rb)), centreline_min_dist_mm=round(float(dmin), 2),
-                target_mm=round(target, 2), overlap_mm3=round((A ^ B).volume(), 3),
-                height_mm=round(float(max(A.bounding_box()[5], B.bounding_box()[5])), 2),
-                inner_arch_a_mm=round(2 * (Ra - ta / 2), 2), inner_arch_b_mm=round(2 * (Rb - tb / 2), 2))
-    return A, B, info
+def build_rings(y_face, clip_w, h=1.1, flank_deg=50.0, embed=0.3, **kw):
+    """Return (relief manifold in clip coordinates, info)."""
+    cs, info = rings2d(**kw)
+    M = relief(cs, h, flank_deg, embed)
+    shift = h / math.tan(math.radians(flank_deg))
+    info.update(relief_h_mm=h, flank_deg_to_horizontal=flank_deg,
+                top_band_w_min_mm=round(info["band_w_mm"] - shift - 0.16, 2))  # band bottom, where it is horizontal
+    return on_badge(M, y_face, clip_w), info

@@ -63,7 +63,7 @@ def test_masskrug_charms(tmp_path):
     assert ct["ok"], ct
     s = g.generate_charms(g.Params(), tmp_path)
     assert s["parts"]["charm_fit_set"]["bodies"] == 3
-    for name in ("clip_rail", "charm_plug", "charm_heart", "charm_blank"):
+    for name in ("clip_rail", "charm_plug", "charm_heart", "charm_blank", "charm_middle_finger"):
         assert s["parts"][name]["watertight"] and s["parts"][name]["bodies"] == 1, name
 
 
@@ -79,9 +79,12 @@ def test_masskrug_text_rings(tmp_path):
         g.build_text_ring(g.Params(), "DAS IST VIEL ZU LANG FUER DEN RING")
 
 
-def test_masskrug_ring_clip(tmp_path):
+def test_masskrug_integrated_clips(tmp_path):
     g = load("masskrug-marker")
-    rep = g.generate_rings(g.Params(), tmp_path)
-    assert rep["watertight"] and rep["bodies"] == 1
-    assert rep["rings"]["linked"] and rep["rings"]["overlap_mm3"] > 0.5
-    assert rep["functional_test"]["ok"]
+    reps = g.generate_integrated(g.Params(), tmp_path)
+    assert set(reps) == {"rings", "bier", "finger"}
+    for name, rep in reps.items():
+        assert rep["watertight"] and rep["bodies"] == 1, name
+        assert rep["functional_test"]["ok"], name
+    assert reps["rings"]["rings"]["flank_deg_to_horizontal"] >= 50
+    assert reps["bier"]["bier"]["groove_loss_pct_at_0_4mm"] <= 2.0

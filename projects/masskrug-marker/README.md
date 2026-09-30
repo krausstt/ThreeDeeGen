@@ -129,10 +129,11 @@ Alle Figuren stehen wie der Plug auf einem flachen Fuß (11 × 8,3 × 3 mm, Nut 
 | `thumbsup` | Daumen hoch, Emoji-Stil: vier klar getrennte Fingerrollen nach außen, dicker Daumen mit Nagel | 16,8 mm | ≈ 0 mm² |
 | `icosa` | Ikosaeder-Käfig, steht auf einer Fläche, 30 Streben Ø 1,24 mm, 12 Knoten Ø 1,8 mm | 12,4 mm | **Obere Dreiecksfläche = drei 5,6-mm-Brücken**, mehrere flache Streben. Anspruchsvoll, Lüfter 100 %. |
 | `voronoi_egg` | Voronoi-Gitter-Ei: 45°-Kegel unten, Kuppel oben, Zellen ≈ 2,7 mm, Stege 1,1 mm, Schale 1 mm, massiver Fußring | 16,4 mm | **Der schwierigste Charm:** Die Kuppel oben besteht aus vielen kurzen Brücken. 0,12-mm-Schicht, langsam, Lüfter 100 %. |
+| `middle_finger` | Stinkefinger: Faust mit Handrücken nach außen, Mittelfinger Ø 3,5→2,8 mm als senkrechte Säule, siehe unten | 18,9 mm | ≈ 0 mm², Finger quer zu den Schichten belastet |
 | `coin` | Münze Ø 12 mm, 2,2 mm dick, erhabener Rand, vertiefter Mittelschlitz, steht auf einem angeformten Standfuß | 15,1 mm | Rand-Unterkante 0,45 mm |
 | `plug`, `mass`, `bavaria`, `frauenkirche` | unverändert aus v2 | 14–23 mm | |
 
-- **Funktionstest pro Charm (automatisch):** Sitz 0 mm³, Aufschieben nur mit Rastkraft (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert (1,4 mm³), Abziehen um 0,4 mm blockiert (1,5 mm³). Alle 16 bestehen, auch die mit breiterem Sockel (Edelweiß, Ikosaeder, Voronoi-Ei): Deren Sockel wächst erst oberhalb der Anschlaghöhe.
+- **Funktionstest pro Charm (automatisch):** Sitz 0 mm³, Aufschieben nur mit Rastkraft (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert (1,4 mm³), Abziehen um 0,4 mm blockiert (1,5 mm³). Alle 17 bestehen, auch die mit breiterem Sockel (Edelweiß, Ikosaeder, Voronoi-Ei): Deren Sockel wächst erst oberhalb der Anschlaghöhe.
 - **Nicht nachgebaut:** Das Kettenhemd um den Henkel und der Randclip mit Kette auf dem Foto sind keine Charms. Sie wären eigene Projekte. Die Bavaria auf dem Foto ist eine Figur, dafür gibt es `bavaria` schon.
 
 **Eigene Minifiguren:** Jedes wasserdichte STL oder 3MF, zum Beispiel von MakerWorld, wird automatisch skaliert (max. 14 × 14 × 22 mm), mittig auf einen Fuß gesetzt und verschmolzen:
@@ -189,30 +190,56 @@ python3 projects/masskrug-marker/generate.py --symbol texts --text-font national
 python3 projects/masskrug-marker/text_preview.py        # Übersichtsbild
 ```
 
-## Clip mit integriertem Charm: Eheringe (`out/integrated/`)
+## Clips mit integriertem Motiv (`out/integrated/`)
+
+Motiv direkt mit der Plakette eines 12-mm-Clips verschmolzen, ohne Schiene. Gedruckt wie alle Clips liegend (z = entlang Henkel), **ohne Stützen**. Das Motiv steht dabei senkrecht auf dem Bett, seine Vorderseite zeigt zur Seite (+Y).
+
+**Druckregel für Reliefs auf senkrechter Fläche:** Die nach unten zeigenden Reliefkanten wären Decken. `rings.relief` schert deshalb jede Schicht nach oben (Schnitt mit der um t/tan 50° verschobenen Kontur): Alle Unterkanten steigen mit 50° zur Waagerechten, Ober- und Seitenkanten bleiben senkrecht. Die Überhangkarten zeigen die 0,05-mm-Treppen dieser Konstruktion als rote Streifen, der Slicer sieht die 50°-Fläche. Der nackte Clip hat schon 16 mm² „Überhang“ (Fasenkante am Bett).
+
+```bash
+python3 projects/masskrug-marker/generate.py --symbol integrated     # alle drei
+python3 projects/masskrug-marker/generate.py --symbol rings          # nur Eheringe
+python3 projects/masskrug-marker/integrated_preview.py               # Übersichtsbilder
+```
+
+### Eheringe v2, Relief (`masskrug_clip_rings.3mf`)
 
 ![Ringe](out/integrated/rings_overview.png)
 
-Zwei ineinandergreifende Eheringe, direkt mit der Plakette eines 12-mm-Clips verschmolzen, ohne Schiene.
+- **v1 verworfen** (Rückmeldung Nutzer: „funktioniert so leider nicht“): zwei stehende 3D-Ringe, freie Innenbögen, zu filigran. v2 ist ein 2,5D-Relief, vollflächig mit der Plakette verschmolzen.
+- Zwei Ringbänder, Ø 8,1 mm außen, Band 2,2 mm, Mittenabstand 3,7 mm, 1,1 mm erhaben (+0,3 mm in der Plakette).
+- **Verkettung grafisch:** oben läuft der linke Ring über den rechten, unten umgekehrt. Das untere Band ist an der Kreuzung mit 0,45 mm Spalt unterbrochen. Dazu ein kleiner Stein (Raute) auf dem rechten Ring.
+- Schmalste Relief-Oberseite 1,1 mm (am unteren Bandscheitel, wo die Scherung am meisten wegnimmt).
+- 22,3 × 20,3 × 12 mm, 1,9 g.
+- **Risiko:** 0,45-mm-Kreuzungsspalt liegt knapp über der Düsenbreite, kann zulaufen. Dann ist die Über/Unter-Wirkung schwächer, die Stabilität nicht.
 
-- **Ringe:**
-  - „Seiner“: Ø 12,7 mm außen, Band 2,4 × 1,5 mm
-  - „Ihrer“: Ø 10,3 mm außen, Band 2,1 × 1,3 mm, mit kleinem achteckigem Stein
-  - Querschnitt als flache Superellipse, wie ein Komfort-Ring.
-- **Aufbau:**
-  - Beide Ringebenen stehen senkrecht. Das Paar ist um 35° gedreht, damit man von vorne beide Ringe sieht.
-  - Der große Ring steckt 1,1 mm in der Plakette. Der kleine ist durch ihn gefädelt und berührt ihn an der Kreuzung mit ≈ 5 mm³ Überlappung.
-  - Alles ist ein Körper. Die Verkettung ist rechnerisch geprüft (`link_check`).
-- **Druck:** Wie alle Clips flach liegend, **ohne Stützen**.
-  - Beide Ringe stehen mit 0,3 mm abgeflachter Unterseite auf dem Bett.
-  - Der Stein hat eine 45°-Unterseite.
-  - **Risiko:** Die runden Innenbögen oben (Ø 9,7 bzw. 7,7 mm innen) werden frei überbrückt und können leicht durchhängen. Lüfter 100 % und 0,12–0,16-mm-Schicht helfen.
-  - Höhe 12,4 mm, 2,0 g.
-- **Nicht umgesetzt: frei bewegliche Ringe.** Das habe ich geprüft. Stehen beide Ringe auf dem Bett, liegen ihre Kreuzungspunkte zu dicht beieinander. Die beste verkettete Lage erreicht 0,93 mm Mittellinienabstand bei 1,4 mm dicken Bändern, für 0,5 mm Spiel bräuchte es ≈ 1,9 mm. Ein frei hängender Ring bräuchte Stützen im Inneren des anderen.
+### Münchner-Bier-Medaillon (`masskrug_clip_bier.3mf`)
 
-```bash
-python3 projects/masskrug-marker/generate.py --symbol rings
-```
+![Münchner Bier](out/integrated/bier_overview.png)
+
+Nach dem Foto des Nutzers, als **eigene, vereinfachte Zeichnung** (nicht das Original-Logo, das vermutlich markenrechtlich geschützt ist: nur für den privaten Gebrauch).
+
+- Runde Platte Ø 20 mm, 1,6 mm dick (+0,6 mm in der Plakette), mit Schwalbenschwanz-Band auf 25,2 mm Breite. Die Platte ragt 6 mm über den Clip hinaus, wie auf dem Foto.
+- Erhaben (0,6 mm, 50°-Scherung): Rand, Band, Figur mit erhobener Maß (Henkelloch 0,72 × 0,84 mm) und winkendem Arm.
+- **Graviert (0,5 mm):** „MÜNCHNER BIER“ auf dem Band (Big Shoulders Bold, Versalhöhe 2,2 mm, 18,1 mm lang) und „MÜNCHEN“ darunter (2,0 mm). Die Schrift ist um 0,12 mm verbreitert, damit jede Nut ≥ 0,4 mm breit ist (Prüfung: 1 % Fläche unter 0,4 mm).
+- Unterseite: Kreis über 45°-Tangenten aufs Bett geführt, Bandspitzen mit 45°-Unterkante (Spitzenhöhe 0,68 mm).
+- 25,7 × 21,4 × 18,2 mm, 2,7 g.
+- **Risiken:**
+  - 2,2-mm-Schrift ist an der Grenze einer 0,4-mm-Düse. Lesbar, aber nicht scharf. Deutlich besser mit 0,2-mm-Düse (A1 mini unterstützt das).
+  - Die Gravur-Oberkanten sind 0,5 mm tiefe Mini-Decken, druckbar, können leicht ausfransen.
+  - Die dünnen Bandspitzen (0,68 mm hoch) sind Deko und bruchempfindlich.
+
+### Stinkefinger (`masskrug_clip_finger.3mf` und Schienen-Charm `middle_finger`)
+
+![Stinkefinger](out/integrated/finger_overview.png)
+
+Wie auf dem Foto: Faust auf der Plakette, der Mittelfinger zeigt entlang des Henkels. Die gleiche Figur gibt es als Schienen-Charm (`out/charms/masskrug_charm_middle_finger.3mf`), dort zeigt der Finger von der Plakette weg (oben am Henkelbogen also nach oben).
+
+- Faust 10,5 mm breit, 5,7 mm tief, 7,4 mm hoch, Handrücken nach vorne. Zeige-, Ring- und kleiner Finger sind als Knöchel und Fingerrollen mit Rillen dazwischen angedeutet. Der Daumen liegt steil (~70°) an der Seite statt waagerecht vorne (das wäre ein Überhang).
+- **Mittelfinger:** senkrechte Säule in Druckrichtung, Ø 3,5 mm an der Wurzel, 2,8 mm an der Spitze, Knöchelwulst und Hohlkehle an der Wurzel, Nagel (0,3 mm Stufe), zwei Gelenkfalten.
+- Integriert: 0,8 mm in der Plakette, 4,9 mm hervorstehend, Finger 4,2 mm über den Clip hinaus, 2,3 g. Charm: 18,9 mm hoch, Funktionstest der Schiene bestanden.
+- Überhang der Figur ≈ 0,3 mm² (Gelenkfalten).
+- **Risiko:** Der Finger wird stehend gedruckt, die Schichtgrenzen liegen quer zur Biegerichtung. Das ist die schwache Richtung. Ein kräftiger Stoß seitlich kann ihn an der Wurzel abbrechen. PETG mit 4 Wänden und 100 % Infill im Finger (Modifier) empfohlen.
 
 ## Dateien (`out/`)
 

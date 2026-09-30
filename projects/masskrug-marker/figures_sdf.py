@@ -358,6 +358,32 @@ def coin(r=6.0, t=2.2):
     return body
 
 
+# ------------------------------------------------------------------ middle finger (image: user photo, emoji style)
+def middle_finger(tip_z=16.2, r_root=1.75, r_tip=1.4):
+    """Fist seen from the back of the hand (+Y) with the middle finger straight up (+Z, the print axis, so the
+    finger is a vertical column without overhangs). Folded fingers = knuckle bumps on top + vertical finger
+    rolls on the front; the thumb lies steep (~70 deg) on the -X side instead of across the front (that would
+    be a horizontal rod = overhang). Middle finger Ø 3.5 -> 2.8 mm, knuckle bulge + fillet at the root."""
+    fist = RBox((0.0, 0.0, 3.7), (4.3, 2.3, 3.7), rr=1.7)
+    rolls, bumps = [], []
+    for x, r in ((-2.75, 1.15), (2.55, 1.1), (3.95, 0.85)):          # index | ring, pinky (middle is up)
+        # tapered lower end (no spherical cap = no overhang)
+        rolls.append(S.Rod([(x, 2.0, 7.0), (x, 2.3, 4.3), (x, 1.6, 2.4)], [r, r * 0.95, r * 0.55]))
+        bumps.append(Ellip((x, 0.6, 7.1), (r * 1.05, 1.9, 1.05)))
+    thumb = S.Rod([(-4.2, 0.2, 1.4), (-4.35, 0.9, 3.4), (-3.9, 1.6, 5.2)], [1.25, 1.2, 1.05])
+    finger = S.Rod([(0.0, 0.5, 6.2), (0.0, 0.5, 9.5), (0.0, 0.5, 12.8), (0.0, 0.5, tip_z - r_tip)],
+                   [r_root, 1.6, 1.5, r_tip])
+    knuckle = Ellip((0.0, 0.6, 7.3), (1.9, 1.95, 1.3))
+    M = sdf_figure(rolls + [thumb, finger], [fist, knuckle, fillet_slab(4.6, 2.8)] + bumps, blend=0.3)
+    # nail (0.3 mm step, printable as a vertical recess) and two knuckle creases on the front
+    M -= m3.Manifold.cube([1.7, 1.0, 2.2]).translate([-0.85, 0.5 + r_tip - 0.3, tip_z - 2.9])
+    for z in (10.4, 13.0):
+        M -= C.capsule([-0.9, 0.5 + 1.6, z], [0.9, 0.5 + 1.6, z], 0.28, 16)
+    for x, y in ((-1.55, 2.75), (1.5, 2.75), (3.25, 3.0)):   # grooves between the folded fingers (vertical)
+        M -= C.capsule([x, y, 4.2], [x, y - 0.3, 8.2], 0.36, 16)
+    return M
+
+
 # ------------------------------------------------------------------ registry
 def _on(fn):
     def build(Lg, r=C.Rail()):
@@ -380,4 +406,5 @@ FIGURES = {
     "icosa": _on(icosa_cage),
     "voronoi_egg": _on(voronoi_egg),
     "coin": _on(coin),
+    "middle_finger": _on(middle_finger),
 }

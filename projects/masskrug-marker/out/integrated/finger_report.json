@@ -1,0 +1,35 @@
+{
+  "watertight": true,
+  "winding_consistent": true,
+  "bodies": 1,
+  "faces": 30516,
+  "bbox_mm": [
+    22.29,
+    24.11,
+    16.2
+  ],
+  "volume_cm3": 1.81,
+  "material": "PETG",
+  "mass_g_at_100pct": 2.3,
+  "overhang_area_gt45deg_pct": 0.868,
+  "overhang_area_gt60deg_pct": 0.857,
+  "overhang_area_gt45deg_mm2": 15.3,
+  "finger": {
+    "embed_mm": 0.8,
+    "fist_w_mm": 10.5,
+    "protrusion_mm": 4.91,
+    "height_mm": 16.2,
+    "above_clip_mm": 4.2
+  },
+  "functional_test": {
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 0.87,
+    "yield_strain_pct": 2.5,
+    "min_wall_mm": 2.0,
+    "wrap_deg": 260.5,
+    "ok": true
+  }
+}

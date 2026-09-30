@@ -35,6 +35,7 @@ import figures_sdf  # noqa: E402
 
 charms.FIGURES.update(figures_sdf.FIGURES)       # organic SDF charms (+ v2 heart / cuckoo / brezn / poop)
 import icons  # noqa: E402
+import medallion  # noqa: E402
 import rings  # noqa: E402
 import textring  # noqa: E402
 
@@ -277,6 +278,8 @@ def generate(p: Params, out_dir: Path, previews=True):
         return generate_texts(p, out_dir)
     if p.symbol == "rings":
         return generate_rings(p, out_dir)
+    if p.symbol == "integrated":
+        return generate_integrated(p, out_dir)
     names = SYMBOLS if p.symbol == "all" else (p.symbol,)
     plate = m3.Manifold()
     for i, s in enumerate(names):
@@ -418,27 +421,72 @@ def build_text_ring(p: Params, text):
 
 
 def build_ring_clip(p: Params):
-    """Clip (plain badge, 12 mm) with two interlocking wedding rings fused on."""
-    pc = replace(p, clip_w=p.charm_clip_w)
+    """Clip (12 mm, wider badge) with two interlocking wedding rings as a relief on the badge."""
+    pc = replace(p, clip_w=p.charm_clip_w, badge_w=13.6)
     d = derived(pc)
     clip, _ = build_clip(pc, "plain")
-    A, B, info = rings.build_rings(d["y_face"], pc.clip_w)
-    return clip + A + B, info, pc, d
+    R, info = rings.build_rings(d["y_face"], pc.clip_w)
+    return clip, R, info, pc, d
 
 
-def generate_rings(p: Params, out_dir: Path, simplify_eps=0.005):
+def build_bier_clip(p: Params):
+    """Clip with the 'Münchner Bier' medallion (Ø 20 mm) fused onto the badge, standing on the bed."""
+    pc = replace(p, clip_w=p.charm_clip_w, badge_w=13.6)
+    d = derived(pc)
+    clip, _ = build_clip(pc, "plain")
+    M, info = medallion.medallion()
+    return clip, medallion.place(M, d["y_face"]), info, pc, d
+
+
+def build_finger_clip(p: Params, embed=0.8):
+    """Clip with the middle-finger fist fused onto the badge; the finger points along the handle (+z = print
+    axis), like the clip in the user's photo."""
+    pc = replace(p, clip_w=p.charm_clip_w, badge_w=13.6)
+    d = derived(pc)
+    clip, _ = build_clip(pc, "plain")
+    F = figures_sdf.middle_finger()
+    b = F.bounding_box()
+    F = F.translate([-(b[0] + b[3]) / 2, d["y_face"] - embed - b[1], -b[2]])
+    bb = F.bounding_box()
+    info = dict(embed_mm=embed, fist_w_mm=round(bb[3] - bb[0], 2), protrusion_mm=round(bb[4] - d["y_face"], 2),
+                height_mm=round(bb[5], 2), above_clip_mm=round(bb[5] - pc.clip_w, 2))
+    return clip, F, info, pc, d
+
+
+INTEGRATED = {"rings": build_ring_clip, "bier": build_bier_clip, "finger": build_finger_clip}
+
+
+def generate_integrated(p: Params, out_dir: Path, names=tuple(INTEGRATED), simplify_eps=0.005):
+    """Clips with a decoration fused onto the badge (no rail): rings (relief), bier (medallion), finger."""
     idir = out_dir / "integrated"
     idir.mkdir(parents=True, exist_ok=True)
-    M, info, pc, d = build_ring_clip(p)
-    ft = functional_test(pc, d)
-    assert ft["ok"] and info["linked"], (ft, info)
-    tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
-    mesh.export(tm, str(idir / "masskrug_clip_rings"), formats=("3mf",))
-    rep = check.report(tm, p.material, extra=dict(rings=info, functional_test=ft))
-    check.assert_printable(rep)
-    check.write(rep, str(idir / "rings_report.json"))
-    print({k: rep[k] for k in ("bbox_mm", "mass_g_at_100pct", "overhang_area_gt45deg_mm2")}, info)
-    return rep
+    reps = {}
+    for name in names:
+        clip, deco, info, pc, d = INTEGRATED[name](p)
+        ft = functional_test(pc, d)
+        assert ft["ok"], ft
+        # the decoration sits on the badge only: nothing may reach into the handle opening / behind the badge
+        y_min = deco.bounding_box()[1]
+        assert y_min >= d["y_face"] - 1.0, (name, y_min)
+        assert (deco ^ clip).volume() > 1.0, f"{name}: decoration not fused into the badge"
+        if name == "rings":
+            assert info["span_u_mm"] <= pc.badge_w - 0.6 and info["span_v_mm"] <= pc.clip_w - 1.2, info
+            assert info["flank_deg_to_horizontal"] >= 50 and info["top_band_w_min_mm"] >= 0.8, info
+        if name == "bier":
+            assert info["groove_loss_pct_at_0_4mm"] <= 2.0, info
+        M = clip + deco
+        tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
+        mesh.export(tm, str(idir / f"masskrug_clip_{name}"), formats=("3mf",))
+        rep = check.report(tm, p.material, extra={name: info, "functional_test": ft})
+        check.assert_printable(rep)
+        check.write(rep, str(idir / f"{name}_report.json"))
+        print(name, {k: rep[k] for k in ("bbox_mm", "mass_g_at_100pct", "overhang_area_gt45deg_mm2")}, info)
+        reps[name] = rep
+    return reps
+
+
+def generate_rings(p: Params, out_dir: Path):
+    return generate_integrated(p, out_dir, ("rings",))["rings"]
 
 
 def generate_texts(p: Params, out_dir: Path, simplify_eps=0.005):
