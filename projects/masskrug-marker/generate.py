@@ -334,7 +334,7 @@ def charm_test(p: Params):
 
 
 def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
-    """Rail clip + charms (plug, heart, blank, optional custom STL) + clearance test set."""
+    """Rail clip + charms (plug, blank, 3D figures, optional custom STL) + clearance test set."""
     cdir = out_dir / "charms"
     cdir.mkdir(parents=True, exist_ok=True)
     pc = replace(p, clip_w=p.charm_clip_w)
@@ -342,26 +342,24 @@ def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
     Lg = charms.groove_len(pc.clip_w, rail)
     ct = charm_test(p)
     assert ct["ok"], f"charm test failed: {ct}"
-    heart, hinfo = charms.charm_heart(Lg, rail)
     parts = {
         "clip_rail": build_clip(pc, "rail")[0],
         "charm_plug": charms.charm_plug(Lg, rail),
-        "charm_heart": heart,
         "charm_blank": charms.charm_blank(Lg, rail),
     }
     clip = parts["clip_rail"]
     fig_tests = {}
-    for name, (builder, kind) in charms.FIGURES.items():
+    for name, builder in charms.FIGURES.items():
         M = builder(Lg, rail)
         parts[f"charm_{name}"] = M
-        mount = charms.mount_back if kind == "back" else charms.mount_on_clip
+        mount = charms.mount_on_clip
         d_c = derived(pc)
 
         def coll(dz, M=M, mount=mount, dy=0.0):
             return (mount(M, d_c["y_face"], rail.stop_len).translate([0, dy, dz]) ^ clip).volume()
 
         slide = [coll(z) for z in np.linspace(0, 3.0, 11)]
-        fig_tests[name] = dict(kind=kind, seated_mm3=round(slide[0], 3), slide_max_mm3=round(max(slide), 3),
+        fig_tests[name] = dict(seated_mm3=round(slide[0], 3), slide_max_mm3=round(max(slide), 3),
                                past_stop_mm3=round(coll(-0.3), 3), pull_out_mm3=round(coll(0.0, dy=0.4), 3))
         ft_ = fig_tests[name]
         assert ft_["seated_mm3"] < 1e-3 and ft_["slide_max_mm3"] < 3.0 and ft_["past_stop_mm3"] > 0.3 \
@@ -386,7 +384,7 @@ def generate_charms(p: Params, out_dir: Path, simplify_eps=0.005):
         check.assert_printable(rep, bodies=len(p.charm_clears.split(",")) if name == "charm_fit_set" else 1)
         reports[name] = rep
     summary = dict(params=asdict(p), groove_len_mm=round(Lg, 2), charm_test=ct, figure_tests=fig_tests,
-                   heart=hinfo, parts=reports)
+                   parts=reports)
     check.write(summary, str(cdir / "charms_report.json"))
     print({"charm_test": ct, **{k: (v["bbox_mm"], v["overhang_area_gt45deg_mm2"]) for k, v in reports.items()}})
     return summary

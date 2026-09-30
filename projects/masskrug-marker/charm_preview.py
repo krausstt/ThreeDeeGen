@@ -1,4 +1,4 @@
-"""Preview sheet for the charm system and the 3D plug clip."""
+"""Preview sheet: every figure charm in print pose, overhang map and mounted (clip on the top bow, badge up)."""
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -23,25 +23,25 @@ def main(out):
     r = C.Rail(clear=p.charm_clear)
     Lg = C.groove_len(pc.clip_w, r)
     T = mesh.manifold_to_trimesh
-    plug_clip = T(G.build_clip(p, "plug_3d")[0])
     rail = G.build_clip(pc, "rail")[0]
-    cp = C.charm_plug(Lg, r)
-    ch, _ = C.charm_heart(Lg, r)
-    items = [(plug_clip, 15, 60, 1.2, "Clip mit 3D-Plug (Stützen)", False),
-             (plug_clip, -10, 40, 1.2, "Überhänge Druckpose", True),
-             (T(rail), 25, 60, 1.3, "Clip mit Schiene", False),
-             (T(cp), 20, -60, 1.4, "Plug-Charm, stehend gedruckt", False),
-             (T(cp), -15, -60, 1.4, "Plug-Charm Überhänge", True),
-             (T(rail + C.mount_on_clip(cp, d["y_face"], r.stop_len)), 15, 60, 1.2, "Plug-Charm aufgeschoben", False),
-             (T(rail + C.mount_on_clip(ch, d["y_face"], r.stop_len)), 15, 60, 1.2, "Herz-Charm aufgeschoben", False),
-             (T(ch), 60, -70, 1.3, "Herz-Charm", False)]
-    fig = plt.figure(figsize=(22, 11))
-    for i, (m, el, az, z, t, oh) in enumerate(items):
-        ax = fig.add_subplot(2, 4, i + 1, projection="3d")
-        draw(ax, m, overhang_colors(m) if oh else shade(m), el, az, zoom=z)
-        ax.set_title(t)
+    charms = {"plug": C.charm_plug(Lg, r), **{n: f(Lg, r) for n, f in C.FIGURES.items()}}
+    n = len(charms)
+    fig = plt.figure(figsize=(3.0 * n, 9.5))
+    for i, (name, M) in enumerate(charms.items()):
+        m = T(M)
+        ax = fig.add_subplot(3, n, i + 1, projection="3d")
+        draw(ax, m, shade(m), 15, 70, zoom=1.35)
+        ax.set_title(f"{name} (Druckpose)", fontsize=9)
+        ax = fig.add_subplot(3, n, n + i + 1, projection="3d")
+        draw(ax, m, overhang_colors(m), -20, 60, zoom=1.35)
+        ax.set_title("Überhänge", fontsize=9)
+        # clip on the top bow of the handle: badge normal (+y) points up
+        a = T((rail + C.mount_on_clip(M, d["y_face"], r.stop_len)).rotate([90, 0, 0]))
+        ax = fig.add_subplot(3, n, 2 * n + i + 1, projection="3d")
+        draw(ax, a, shade(a), 10, -30, zoom=1.2)
+        ax.set_title("am Clip, oben am Henkel", fontsize=9)
     plt.tight_layout()
-    fig.savefig(out, dpi=85)
+    fig.savefig(out, dpi=75)
 
 
 if __name__ == "__main__":

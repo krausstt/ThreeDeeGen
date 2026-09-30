@@ -78,7 +78,7 @@ python3 projects/masskrug-marker/icon_sheet.py                       # Übersich
 
 ![Charms](out/charms/charms_overview.png)
 
-Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben lassen.
+Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben lassen. **Status:** Clip und Schiene sind vom Nutzer gedruckt und funktionieren. Die Figuren v2 sind noch ungedruckt.
 
 - **Schiene:**
   - Der Clip ist 12 mm lang, 2 mm länger als die Symbol-Clips.
@@ -102,32 +102,33 @@ Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben la
 |---|---|---|
 | `masskrug_clip_rail.3mf` | Clip mit Schiene | wie alle Clips, ohne Stützen |
 | `masskrug_charm_plug.3mf` / `.stl` | Plug-Charm, 11 × 8,3 × 19 mm, Kolben Ø 8 mm | **stehend, ohne Stützen**: Kolbenunterseite 46,5° zur Waagerechten (Steigung 0,95), Hals Ø 3 mm |
-| `masskrug_charm_heart.3mf` | Herz-Charm, 12 mm breit | stehend. Das Herz wächst im 45°-Winkel aus dem Fuß, erst ab 2,1 mm Höhe, damit nichts am Anschlag anstößt. |
 | `masskrug_charm_blank.3mf` | leerer Fuß mit flacher Oberseite | zum Aufkleben eigener Minis |
 | `masskrug_charm_fit_set.3mf` | 3 leere Füße mit 0,15 / 0,2 / 0,3 mm Spiel (1 / 2 / 3 Punkte) | zuerst drucken |
 
-### 3D-Figuren-Charms
+### 3D-Figuren-Charms (v2)
 
-![Figuren](out/charms/figures_overview.png)
+Die Übersicht oben zeigt jede Figur in drei Ansichten: Druckpose, Überhänge und aufgeklipst oben am Henkel.
 
-![Figuren 2](out/charms/figures2_overview.png)
+Alle Figuren stehen jetzt **wie der Plug auf einem flachen Fuß** (11 × 8,3 × 3 mm, Nut unten) und zeigen **von der Plakette weg**. Ist der Clip oben am Henkelbogen aufgeklipst, zeigen sie also nach oben. Die Vorderseite der Figuren zeigt in Schieberichtung, weg vom Anschlag. Wer sie andersherum will, klipst den Clip umgekehrt auf.
 
-Die Figuren sollen am Krug aufrecht stehen. Ihre Hochachse muss deshalb entlang des Griffs laufen, also in Schieberichtung. Maßkrug, Bavaria, Daumen, Kackhaufen, Frauenkirche und Kuckucksuhr bekommen darum eine **senkrechte Rückenplatte** (10 × 3 × 8,3 mm) mit senkrechter Nut. Sie werden stehend auf ihren Füßen gedruckt, die Nut ist senkrecht extrudiert. Überall **ohne Stützen**.
+- **Druck:** Stehend auf dem Fuß, **ohne Stützen**. Ist eine Figur unten breiter als der Fuß (Kackhaufen), wächst ein Sockel mit 42° aus dem Fuß heraus, erst oberhalb der Anschlaghöhe.
+- **v1 → v2:** Die Rückenplatte entfällt, das Herz ist jetzt vollplastisch, die Brezn steht aufrecht, „Daumen hoch“ ist entfernt.
 
-| Datei | Figur | Maße (B × T × H) | Überhang > 45° |
-|---|---|---|---|
-| `masskrug_charm_brezn.3mf` | Brezn, flach wie das Herz, Löcher offen, gewölbte Oberseite | 14 × 12,7 × 8,7 mm | nur Nutdecke und 0,2-mm-Treppen der 42°-Schräge |
-| `masskrug_charm_mass.3mf` | Mini-Maßkrug mit 15 Dellen, Henkel mit 45°-Unterseite, Schaumkrone | 11,6 × 9,2 × 11,7 mm | 3 mm² |
-| `masskrug_charm_bavaria.3mf` | Bavaria, stilisiert: Gewand, erhobener Kranz (glatter Ring, kein Eichenlaub), Schwert, Löwe | 11 × 9 × 20,6 mm | 3 mm² (Kranz innen) |
-| `masskrug_charm_thumbsup.3mf` | Daumen hoch: Faust mit Fingerrillen nach außen, Daumen zeigt entlang des Griffs | 10 × 8,6 × 13,8 mm | 10 mm² (Rillendecken, 0,6 mm tief) |
-| `masskrug_charm_poop.3mf` | Kackhaufen-Emoji: 3 Softeis-Stufen (jede Flanke ≤ 45°), Augen, Lächeln | 10 × 11,7 × 11,3 mm | 1 mm² |
-| `masskrug_charm_frauenkirche.3mf` | Frauenkirche, Westfassade: 2 Türme mit Welschen Hauben (alle Flanken ≤ 45°), Spitzbogenfenster, Portal, Giebel dazwischen | 10 × 6,2 × 17,5 mm | 1 mm² |
-| `masskrug_charm_cuckoo.3mf` | Kuckucksuhr: Satteldach, Zifferblatt mit 12 Punkten und Zeigern, Kuckuck im Türchen, V-Boden 47°, Pendel, 2 Tannenzapfen-Gewichte (stehen auf dem Bett) | 10,8 × 8 × 19,6 mm | ≈ 6 mm² vor Netzvereinfachung (Zifferblatt-Unterkante 0,7 mm, V-Spitze), unkritisch |
+| Datei | Figur | Maße (B × T × H) | Masse | Überhang > 45° (ohne Nutdecke) |
+|---|---|---|---|---|
+| `masskrug_charm_heart.3mf` | Herz, vollplastisch: zwei Ellipsoid-Hälften, zur Spitze zusammengeführt, steht auf der Spitze. Flanken 44° zur Senkrechten. | 11,6 × 8,3 × 14 mm | 0,6 g | 0 mm² |
+| `masskrug_charm_brezn.3mf` | Brezn, aufrecht, 13 mm breit, 3,8 mm dick, abgestufte Kante | 13 × 8,3 × 13,8 mm | 0,6 g | ≈ 43 mm²: Bögen der Schlaufen (Brücken ≤ 3 mm) und Bauchflanken um 51°. Sollte ohne Stützen gehen, ist aber der kritischste Charm. |
+| `masskrug_charm_mass.3mf` | Mini-Maßkrug: 15 Dellen, Henkel mit 45°-Unterseite, Schaumkrone | 11 × 8,3 × 14,4 mm | 0,8 g | 1,5 mm² |
+| `masskrug_charm_bavaria.3mf` | Bavaria, stilisiert: Gewand, erhobener Kranz (glatter Ring), Schwert, Löwe | 11 × 8,3 × 23,3 mm | 0,6 g | 2,6 mm² (Kranz innen) |
+| `masskrug_charm_poop.3mf` | Kackhaufen: 3 Softeis-Stufen (jede Flanke ≤ 45°), Augen, Lächeln | 11 × 9,2 × 14 mm | 0,7 g | 3,8 mm² |
+| `masskrug_charm_frauenkirche.3mf` | Frauenkirche, Westfassade: 2 Türme mit Welschen Hauben, Spitzbogenfenster, Portal, Giebel | 11 × 8,3 × 20,2 mm | 0,7 g | 0 mm² |
+| `masskrug_charm_cuckoo.3mf` | Kuckucksuhr: Satteldach, Zifferblatt, Kuckuck, V-Boden 49°, Pendel, 2 Tannenzapfen-Gewichte | 11 × 8,3 × 22,3 mm | 0,8 g | 6,5 mm² (Zifferblatt-Unterkante) |
 
-- **Funktionstest pro Figur:** Sitz 0 mm³, beim Aufschieben nur die Rastkraft der Rampe (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert, Abziehen um 0,4 mm blockiert. Keine Figur stößt an den Clip.
+- **Funktionstest pro Figur (automatisch):** Sitz 0 mm³, beim Aufschieben nur die Rastkraft der Rampe (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert (1,4 mm³), Abziehen um 0,4 mm blockiert (1,5 mm³).
+- **Hebel:** Bavaria (23 mm) und Kuckucksuhr (22 mm) ragen weit heraus. Ein Stoß hebelt stärker an der Schiene als beim Plug (19 mm).
 - **Druckhinweise:**
-  - Schwert der Bavaria (Ø 1 mm) und Kranz sind die filigransten Teile. Mit 0,2-mm-Düse oder 0,12-mm-Schicht werden sie sauberer.
-  - Die Bavaria ist 20,6 mm hoch. Etwas langsamer drucken, dann schwingt sie weniger.
+  - Schwert der Bavaria (Ø 1 mm), Kranz, Zeiger der Uhr: Mit 0,2-mm-Düse oder 0,12-mm-Schicht werden sie sauberer.
+  - Hohe Figuren etwas langsamer drucken.
 
 **Eigene Minifiguren:** Jedes wasserdichte STL oder 3MF, zum Beispiel von MakerWorld, wird automatisch skaliert (max. 14 × 14 × 22 mm), mittig auf einen Fuß gesetzt und verschmolzen:
 
