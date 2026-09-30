@@ -35,6 +35,7 @@ import figures_sdf  # noqa: E402
 
 charms.FIGURES.update(figures_sdf.FIGURES)       # organic SDF charms (+ v2 heart / cuckoo / brezn / poop)
 import icons  # noqa: E402
+import rings  # noqa: E402
 import textring  # noqa: E402
 
 SEG = 160
@@ -274,6 +275,8 @@ def generate(p: Params, out_dir: Path, previews=True):
         return generate_charms(p, out_dir)
     if p.symbol == "texts":
         return generate_texts(p, out_dir)
+    if p.symbol == "rings":
+        return generate_rings(p, out_dir)
     names = SYMBOLS if p.symbol == "all" else (p.symbol,)
     plate = m3.Manifold()
     for i, s in enumerate(names):
@@ -412,6 +415,30 @@ def build_text_ring(p: Params, text):
     info["min_feature_loss_pct"] = round(100 * (cs - cs.offset(-0.35, m3.JoinType.Round).offset(
         0.35, m3.JoinType.Round)).area() / cs.area(), 1)
     return ring - tool, info, pt, d
+
+
+def build_ring_clip(p: Params):
+    """Clip (plain badge, 12 mm) with two interlocking wedding rings fused on."""
+    pc = replace(p, clip_w=p.charm_clip_w)
+    d = derived(pc)
+    clip, _ = build_clip(pc, "plain")
+    A, B, info = rings.build_rings(d["y_face"], pc.clip_w)
+    return clip + A + B, info, pc, d
+
+
+def generate_rings(p: Params, out_dir: Path, simplify_eps=0.005):
+    idir = out_dir / "integrated"
+    idir.mkdir(parents=True, exist_ok=True)
+    M, info, pc, d = build_ring_clip(p)
+    ft = functional_test(pc, d)
+    assert ft["ok"] and info["linked"], (ft, info)
+    tm = mesh.simplify(mesh.manifold_to_trimesh(M), simplify_eps)
+    mesh.export(tm, str(idir / "masskrug_clip_rings"), formats=("3mf",))
+    rep = check.report(tm, p.material, extra=dict(rings=info, functional_test=ft))
+    check.assert_printable(rep)
+    check.write(rep, str(idir / "rings_report.json"))
+    print({k: rep[k] for k in ("bbox_mm", "mass_g_at_100pct", "overhang_area_gt45deg_mm2")}, info)
+    return rep
 
 
 def generate_texts(p: Params, out_dir: Path, simplify_eps=0.005):

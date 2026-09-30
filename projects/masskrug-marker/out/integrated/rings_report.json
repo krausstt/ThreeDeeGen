@@ -1,0 +1,59 @@
+{
+  "watertight": true,
+  "winding_consistent": true,
+  "bodies": 1,
+  "faces": 39394,
+  "bbox_mm": [
+    22.29,
+    30.6,
+    12.4
+  ],
+  "volume_cm3": 1.578,
+  "material": "PETG",
+  "mass_g_at_100pct": 2.0,
+  "overhang_area_gt45deg_pct": 2.733,
+  "overhang_area_gt60deg_pct": 1.686,
+  "overhang_area_gt45deg_mm2": 50.8,
+  "rings": {
+    "variant": "fused",
+    "yaw_deg": 35.0,
+    "ring_a": {
+      "center": [
+        -1.3,
+        15.55,
+        6.05
+      ],
+      "r_mean": 5.6,
+      "width": 2.4,
+      "thick": 1.5
+    },
+    "ring_b": {
+      "center": [
+        -0.33,
+        18.95,
+        4.85
+      ],
+      "r_mean": 4.5,
+      "width": 2.1,
+      "thick": 1.3
+    },
+    "linked": true,
+    "centreline_min_dist_mm": 0.93,
+    "target_mm": 1.1,
+    "overlap_mm3": 5.184,
+    "height_mm": 12.4,
+    "inner_arch_a_mm": 9.7,
+    "inner_arch_b_mm": 7.7
+  },
+  "functional_test": {
+    "preload_overlap_mm2": 17.75,
+    "gap_mm": 10.51,
+    "snap_opening_mm": 4.09,
+    "retention_per_side_mm": 2.04,
+    "strain_est_pct": 0.87,
+    "yield_strain_pct": 2.5,
+    "min_wall_mm": 2.0,
+    "wrap_deg": 260.5,
+    "ok": true
+  }
+}

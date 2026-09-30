@@ -189,6 +189,31 @@ python3 projects/masskrug-marker/generate.py --symbol texts --text-font national
 python3 projects/masskrug-marker/text_preview.py        # Übersichtsbild
 ```
 
+## Clip mit integriertem Charm: Eheringe (`out/integrated/`)
+
+![Ringe](out/integrated/rings_overview.png)
+
+Zwei ineinandergreifende Eheringe, direkt mit der Plakette eines 12-mm-Clips verschmolzen, ohne Schiene.
+
+- **Ringe:**
+  - „Seiner“: Ø 12,7 mm außen, Band 2,4 × 1,5 mm
+  - „Ihrer“: Ø 10,3 mm außen, Band 2,1 × 1,3 mm, mit kleinem achteckigem Stein
+  - Querschnitt als flache Superellipse, wie ein Komfort-Ring.
+- **Aufbau:**
+  - Beide Ringebenen stehen senkrecht. Das Paar ist um 35° gedreht, damit man von vorne beide Ringe sieht.
+  - Der große Ring steckt 1,1 mm in der Plakette. Der kleine ist durch ihn gefädelt und berührt ihn an der Kreuzung mit ≈ 5 mm³ Überlappung.
+  - Alles ist ein Körper. Die Verkettung ist rechnerisch geprüft (`link_check`).
+- **Druck:** Wie alle Clips flach liegend, **ohne Stützen**.
+  - Beide Ringe stehen mit 0,3 mm abgeflachter Unterseite auf dem Bett.
+  - Der Stein hat eine 45°-Unterseite.
+  - **Risiko:** Die runden Innenbögen oben (Ø 9,7 bzw. 7,7 mm innen) werden frei überbrückt und können leicht durchhängen. Lüfter 100 % und 0,12–0,16-mm-Schicht helfen.
+  - Höhe 12,4 mm, 2,0 g.
+- **Nicht umgesetzt: frei bewegliche Ringe.** Das habe ich geprüft. Stehen beide Ringe auf dem Bett, liegen ihre Kreuzungspunkte zu dicht beieinander. Die beste verkettete Lage erreicht 0,93 mm Mittellinienabstand bei 1,4 mm dicken Bändern, für 0,5 mm Spiel bräuchte es ≈ 1,9 mm. Ein frei hängender Ring bräuchte Stützen im Inneren des anderen.
+
+```bash
+python3 projects/masskrug-marker/generate.py --symbol rings
+```
+
 ## Dateien (`out/`)
 
 | Datei | Inhalt | Masse |

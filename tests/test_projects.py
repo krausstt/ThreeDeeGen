@@ -77,3 +77,11 @@ def test_masskrug_text_rings(tmp_path):
         assert r["text"]["cap_height_mm"] >= 4.2 and r["text"]["min_feature_loss_pct"] < 5
     with pytest.raises(ValueError):
         g.build_text_ring(g.Params(), "DAS IST VIEL ZU LANG FUER DEN RING")
+
+
+def test_masskrug_ring_clip(tmp_path):
+    g = load("masskrug-marker")
+    rep = g.generate_rings(g.Params(), tmp_path)
+    assert rep["watertight"] and rep["bodies"] == 1
+    assert rep["rings"]["linked"] and rep["rings"]["overlap_mm3"] > 0.5
+    assert rep["functional_test"]["ok"]
