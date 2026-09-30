@@ -31,6 +31,9 @@ from tdg import check, cli, mesh, render  # noqa: E402
 
 sys.path.insert(0, str(HERE))
 import charms  # noqa: E402
+import figures_sdf  # noqa: E402
+
+charms.FIGURES.update(figures_sdf.FIGURES)       # organic SDF charms (+ v2 heart / cuckoo / brezn / poop)
 import icons  # noqa: E402
 import textring  # noqa: E402
 

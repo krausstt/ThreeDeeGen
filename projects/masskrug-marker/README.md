@@ -105,30 +105,35 @@ Ein Clip mit Schwalbenschwanz-Schiene, auf die sich beliebige Charms schieben la
 | `masskrug_charm_blank.3mf` | leerer Fuß mit flacher Oberseite | zum Aufkleben eigener Minis |
 | `masskrug_charm_fit_set.3mf` | 3 leere Füße mit 0,15 / 0,2 / 0,3 mm Spiel (1 / 2 / 3 Punkte) | zuerst drucken |
 
-### 3D-Figuren-Charms (v2)
+### 3D-Figuren-Charms (v3)
 
-Die Übersicht oben zeigt jede Figur in drei Ansichten: Druckpose, Überhänge und aufgeklipst oben am Henkel.
+Die Übersicht oben zeigt jeden Charm in drei Ansichten: Druckpose, Überhänge und aufgeklipst oben am Henkel.
 
-Alle Figuren stehen jetzt **wie der Plug auf einem flachen Fuß** (11 × 8,3 × 3 mm, Nut unten) und zeigen **von der Plakette weg**. Ist der Clip oben am Henkelbogen aufgeklipst, zeigen sie also nach oben. Die Vorderseite der Figuren zeigt in Schieberichtung, weg vom Anschlag. Wer sie andersherum will, klipst den Clip umgekehrt auf.
+Alle Figuren stehen wie der Plug auf einem flachen Fuß (11 × 8,3 × 3 mm, Nut unten) und zeigen von der Plakette weg. Sitzt der Clip oben am Henkelbogen, zeigen sie also nach oben. Gedruckt werden sie stehend, **ohne Stützen**.
 
-- **Druck:** Stehend auf dem Fuß, **ohne Stützen**. Ist eine Figur unten breiter als der Fuß (Kackhaufen), wächst ein Sockel mit 42° aus dem Fuß heraus, erst oberhalb der Anschlaghöhe.
-- **v1 → v2:** Die Rückenplatte entfällt, das Herz ist jetzt vollplastisch, die Brezn steht aufrecht, „Daumen hoch“ ist entfernt.
+- **Organische Charms** (`figures_sdf.py`): Sie entstehen mit dem SDF-Werkzeug aus `tdg/sdf.py`, Teile verschmelzen mit weicher Rundung. Eine Platte knapp unter dem Fuß wird mitverschmolzen. So wächst jede Figur mit einer **Hohlkehle** in den Fuß statt auf einem Punkt zu stehen.
+- **v2 → v3:**
+  - Herz und Kuckucksuhr sind stabiler.
+  - Brezn und Kackhaufen sind runder.
+  - Neu nach dem Foto des Nutzers: Rakete, Edelweiß, Filigran-Herz, Daumen hoch (neu), Ikosaeder-Käfig, Voronoi-Ei, Münze.
 
-| Datei | Figur | Maße (B × T × H) | Masse | Überhang > 45° (ohne Nutdecke) |
-|---|---|---|---|---|
-| `masskrug_charm_heart.3mf` | Herz, vollplastisch: zwei Ellipsoid-Hälften, zur Spitze zusammengeführt, steht auf der Spitze. Flanken 44° zur Senkrechten. | 11,6 × 8,3 × 14 mm | 0,6 g | 0 mm² |
-| `masskrug_charm_brezn.3mf` | Brezn, aufrecht, 13 mm breit, 3,8 mm dick, abgestufte Kante | 13 × 8,3 × 13,8 mm | 0,6 g | ≈ 43 mm²: Bögen der Schlaufen (Brücken ≤ 3 mm) und Bauchflanken um 51°. Sollte ohne Stützen gehen, ist aber der kritischste Charm. |
-| `masskrug_charm_mass.3mf` | Mini-Maßkrug: 15 Dellen, Henkel mit 45°-Unterseite, Schaumkrone | 11 × 8,3 × 14,4 mm | 0,8 g | 1,5 mm² |
-| `masskrug_charm_bavaria.3mf` | Bavaria, stilisiert: Gewand, erhobener Kranz (glatter Ring), Schwert, Löwe | 11 × 8,3 × 23,3 mm | 0,6 g | 2,6 mm² (Kranz innen) |
-| `masskrug_charm_poop.3mf` | Kackhaufen: 3 Softeis-Stufen (jede Flanke ≤ 45°), Augen, Lächeln | 11 × 9,2 × 14 mm | 0,7 g | 3,8 mm² |
-| `masskrug_charm_frauenkirche.3mf` | Frauenkirche, Westfassade: 2 Türme mit Welschen Hauben, Spitzbogenfenster, Portal, Giebel | 11 × 8,3 × 20,2 mm | 0,7 g | 0 mm² |
-| `masskrug_charm_cuckoo.3mf` | Kuckucksuhr: Satteldach, Zifferblatt, Kuckuck, V-Boden 49°, Pendel, 2 Tannenzapfen-Gewichte | 11 × 8,3 × 22,3 mm | 0,8 g | 6,5 mm² (Zifferblatt-Unterkante) |
+| Charm | Figur | Höhe (inkl. Fuß) | Druck / Risiko |
+|---|---|---|---|
+| `heart` | Pausbackiges Herz (zwei Ellipsoid-Hälften, zur Spitze zusammengeführt) auf geschwungenem S-Stiel, Stiel ≥ Ø 2,6 mm, 3 mm tief ins Herz geführt, Hohlkehle in den Fuß | 17,6 mm | 0 mm² Überhang |
+| `heart_filigree` | Herz mit Rahmen, zwei Spiralranken und Mittelranke (Stege 0,9–1,0 mm), 2,4 mm dick, 0,3 mm Stufenkante, konkaver Fuß | 15,7 mm | Lochdecken sind kurze Brücken ≤ 2,5 mm |
+| `cuckoo` | Kuckucksuhr mit **massivem Rückenbrett** (2 mm) vom Fuß bis in den V-Boden. Ketten, Pendel und Gewichte sitzen davor, das Haus hängt nicht mehr an 0,8-mm-Stangen. Brett mit zwei Zierausschnitten. | 22,3 mm | Zifferblatt-Unterkante |
+| `brezn` | Brezn aus runden Teigsträngen (Bauch Ø 2,7 mm, Arme Ø 1,9 mm), die Arme kreuzen versetzt, 6 Salzkörner | 13,9 mm | Schlaufen-Decken als Brücken ≤ 3 mm |
+| `poop` | Kackhaufen, weich gerundet, 2 große Glubschaugen mit Pupillen, breites Lächeln | 13,6 mm | Augen-Unterseiten klein |
+| `rocket` | Retro-Rakete: Ogiv-Rumpf, 3 Flossen bis zum Fuß, Bullauge mit Ring | 19,1 mm | ≈ 0 mm² |
+| `edelweiss` | Edelweiß liegend mit Blüte nach außen: 9 spitze, gewölbte Hochblätter, innerer Kranz, Blütenkörbchen aus 7 Kugeln. Steht auf einem sternförmigen 42°-Sockel, weil die Blüte (12 mm) breiter ist als der Fuß. | 6,8 mm | Treppen der 42°-Schräge |
+| `thumbsup` | Daumen hoch, Emoji-Stil: vier klar getrennte Fingerrollen nach außen, dicker Daumen mit Nagel | 16,8 mm | ≈ 0 mm² |
+| `icosa` | Ikosaeder-Käfig, steht auf einer Fläche, 30 Streben Ø 1,24 mm, 12 Knoten Ø 1,8 mm | 12,4 mm | **Obere Dreiecksfläche = drei 5,6-mm-Brücken**, mehrere flache Streben. Anspruchsvoll, Lüfter 100 %. |
+| `voronoi_egg` | Voronoi-Gitter-Ei: 45°-Kegel unten, Kuppel oben, Zellen ≈ 2,7 mm, Stege 1,1 mm, Schale 1 mm, massiver Fußring | 16,4 mm | **Der schwierigste Charm:** Die Kuppel oben besteht aus vielen kurzen Brücken. 0,12-mm-Schicht, langsam, Lüfter 100 %. |
+| `coin` | Münze Ø 12 mm, 2,2 mm dick, erhabener Rand, vertiefter Mittelschlitz, steht auf einem angeformten Standfuß | 15,1 mm | Rand-Unterkante 0,45 mm |
+| `plug`, `mass`, `bavaria`, `frauenkirche` | unverändert aus v2 | 14–23 mm | |
 
-- **Funktionstest pro Figur (automatisch):** Sitz 0 mm³, beim Aufschieben nur die Rastkraft der Rampe (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert (1,4 mm³), Abziehen um 0,4 mm blockiert (1,5 mm³).
-- **Hebel:** Bavaria (23 mm) und Kuckucksuhr (22 mm) ragen weit heraus. Ein Stoß hebelt stärker an der Schiene als beim Plug (19 mm).
-- **Druckhinweise:**
-  - Schwert der Bavaria (Ø 1 mm), Kranz, Zeiger der Uhr: Mit 0,2-mm-Düse oder 0,12-mm-Schicht werden sie sauberer.
-  - Hohe Figuren etwas langsamer drucken.
+- **Funktionstest pro Charm (automatisch):** Sitz 0 mm³, Aufschieben nur mit Rastkraft (0,19 mm³), 0,3 mm über den Anschlag hinaus blockiert (1,4 mm³), Abziehen um 0,4 mm blockiert (1,5 mm³). Alle 16 bestehen, auch die mit breiterem Sockel (Edelweiß, Ikosaeder, Voronoi-Ei): Deren Sockel wächst erst oberhalb der Anschlaghöhe.
+- **Nicht nachgebaut:** Das Kettenhemd um den Henkel und der Randclip mit Kette auf dem Foto sind keine Charms. Sie wären eigene Projekte. Die Bavaria auf dem Foto ist eine Figur, dafür gibt es `bavaria` schon.
 
 **Eigene Minifiguren:** Jedes wasserdichte STL oder 3MF, zum Beispiel von MakerWorld, wird automatisch skaliert (max. 14 × 14 × 22 mm), mittig auf einen Fuß gesetzt und verschmolzen:
 
