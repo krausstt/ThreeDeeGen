@@ -88,3 +88,15 @@ def test_masskrug_integrated_clips(tmp_path):
         assert rep["functional_test"]["ok"], name
     assert reps["rings"]["rings"]["flank_deg_to_horizontal"] >= 50
     assert reps["bier"]["bier"]["groove_loss_pct_at_0_4mm"] <= 2.0
+
+
+def test_tuerklinke_louis(tmp_path):
+    import pytest
+    g = load("tuerklinke-louis")
+    s = g.generate(g.Params(voxel=0.08), tmp_path, previews=False)
+    assert all(s["details_ok"].values())
+    for rep in list(s["parts"].values()) + [s["probe"]]:
+        assert rep["watertight"] and rep["bodies"] == 1
+        assert rep["overhang_area_gt45deg_mm2"] < 5
+    with pytest.raises(AssertionError):                 # too small for a 0.4 mm nozzle
+        g.generate(g.Params(size=0.6, voxel=0.08), tmp_path, previews=False)

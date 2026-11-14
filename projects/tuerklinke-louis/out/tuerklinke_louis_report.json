@@ -1,0 +1,89 @@
+{
+  "params": {
+    "door_panel_h": 150.0,
+    "size": 1.0,
+    "hand": "both",
+    "nozzle": 0.4,
+    "material": "PLA",
+    "voxel": 0.04
+  },
+  "handle": {
+    "scale_factor": 1.0,
+    "model_scale": "1:13.3",
+    "plate_mm": [
+      5.6,
+      22.0
+    ],
+    "lever_len_mm": 11.52,
+    "projection_mm": 5.75,
+    "lever_to_keyhole_mm": 5.4,
+    "pearls": 50,
+    "pearl_d_mm": 0.66,
+    "web_min_mm": 0.99,
+    "web_arch_span_mm": 7.0,
+    "web_arch_flank_deg": 45.0,
+    "lever_min_d_mm": 1.04,
+    "keyhole_slot_min_mm": 0.52,
+    "plate_t_mm": 0.8
+  },
+  "details_ok": {
+    "web": true,
+    "lever": true,
+    "pearls": true,
+    "keyhole": true,
+    "plate": true
+  },
+  "parts": {
+    "rechts": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 46604,
+      "bbox_mm": [
+        14.31,
+        21.96,
+        5.75
+      ],
+      "volume_cm3": 0.164,
+      "material": "PLA",
+      "mass_g_at_100pct": 0.2,
+      "overhang_area_gt45deg_pct": 0.17,
+      "overhang_area_gt60deg_pct": 0.087,
+      "overhang_area_gt45deg_mm2": 0.7
+    },
+    "links": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 46604,
+      "bbox_mm": [
+        14.31,
+        21.96,
+        5.75
+      ],
+      "volume_cm3": 0.164,
+      "material": "PLA",
+      "mass_g_at_100pct": 0.2,
+      "overhang_area_gt45deg_pct": 0.17,
+      "overhang_area_gt60deg_pct": 0.087,
+      "overhang_area_gt45deg_mm2": 0.7
+    }
+  },
+  "probe": {
+    "watertight": true,
+    "winding_consistent": true,
+    "bodies": 1,
+    "faces": 90112,
+    "bbox_mm": [
+      40.0,
+      30.0,
+      6.85
+    ],
+    "volume_cm3": 1.736,
+    "material": "PLA",
+    "mass_g_at_100pct": 2.2,
+    "overhang_area_gt45deg_pct": 0.05,
+    "overhang_area_gt60deg_pct": 0.026,
+    "overhang_area_gt45deg_mm2": 1.5
+  }
+}

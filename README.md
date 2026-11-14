@@ -9,6 +9,7 @@ Parametrische und generative 3D-Druck-Modelle als Code. Jede Druckdatei wird aus
 | [mae-west-eiffel](projects/mae-west-eiffel/) | Generative Fusion aus Mae West (München) und Eiffelturm, 180 mm | PLA | fertig, ungedruckt |
 | [bike-bell-bayonet](projects/bike-bell-bayonet/) | Bajonett-Aufnahme + Lenkerband für Decathlon-Fahrradklingel, Lenker 31–39 mm | PETG + TPU (oder TPU) | final v2, ungedruckt |
 | [masskrug-marker](projects/masskrug-marker/) | Markier-Clips für den Henkel eines 1-l-Maßkrugs: Symbol-Clips, Charm-Clip mit 3D-Figuren, Text-Ringe | PETG | final v1, ungedruckt |
+| [tuerklinke-louis](projects/tuerklinke-louis/) | Dekorative Louis-XV-Türklinke mit Langschild zum Aufsetzen auf Boiserie-Paneele im Slicer, ≈ 1:13 | PLA/PETG | v1, ungedruckt |
 
 ## Schnellstart
 
