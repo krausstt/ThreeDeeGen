@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 scratch_test/
+
+# panel-derived outputs (MakerWorld Exclusive License), never commit
+out_private/

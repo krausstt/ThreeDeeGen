@@ -285,9 +285,10 @@ def lever_axis(p, f, surface, sink=0.1, on_panel=False):
     return max(LEVER_H_MIN if on_panel else p.lever_h, LEVER_H_MIN, float(need.max()))
 
 
-def build(p: Params, surface=None, f=None, on_panel=False):
-    """Handle in local reference units scaled by k. surface: panel height relative to the base (local units)."""
-    k = scale_factor(p)
+def build(p: Params, surface=None, f=None, on_panel=False, k=None):
+    """Handle in local reference units scaled by k (default scale_factor(p)). surface: panel height relative to
+    the base (local units)."""
+    k = scale_factor(p) if k is None else k
     surface = surface or (lambda xy: np.zeros(len(xy)))
     f = (p.lever_len if p.lever_len > 0 else 1.0) if f is None else f
     axis = lever_axis(p, f, surface, on_panel=on_panel)
@@ -336,14 +337,15 @@ def parse_xy(sv):
     return np.array([x, y])
 
 
-def mount_on_panel(p: Params, panel, hand, out_dir):
-    """Sample the panel under the handle, sit the escutcheon on the stile, lay the lever on the moulding,
-    optionally pick the lever length (lever_len = 0) with the least visible web. Writes the handle in panel
-    coordinates and panel + handle as one STL."""
-    k = scale_factor(p)
+def mount_lever(p: Params, panel, at, hand, k=None, angle=0.0, embed=0.0):
+    """Conforming mount of the handle on an in-memory panel mesh: sample the panel under the handle, sit the
+    escutcheon on the stile, lay the lever on the moulding, optionally pick the lever length (lever_len = 0) with
+    the least visible web. at = lever axis (x, y) in panel coordinates, k = handle scale (default scale_factor(p)),
+    embed = sink the base into the panel (mm, for a clean boolean union). Returns (Manifold in panel coords, info)."""
+    k = scale_factor(p) if k is None else k
     sx = -1.0 if hand == "links" else 1.0
-    at = parse_xy(p.at)
-    to_panel = mount.placement(at, p.angle, k, (0.0, BOSS_Y))
+    at = np.asarray(at, float)
+    to_panel = mount.placement(at, angle, k, (0.0, BOSS_Y))
     win = to_panel(np.array([[-4.0, -12.0], [16.5, -12.0], [16.5, 12.0], [-4.0, 12.0]]) * [sx, 1])
     hm = mount.HeightMap(panel, win.min(0) - 1, win.max(0) + 1)
     # escutcheon footprint -> base height
@@ -362,7 +364,7 @@ def mount_on_panel(p: Params, panel, hand, out_dir):
             _, _, _, met = web_solution(ax_, fc, surface, p.bridge_max / k, step=0.15)
             tried[float(fc)] = (round(met["web_area"] * k * k, 2), round(met["end_post"] * k, 2))
         f = min(tried, key=lambda q: tried[q][0] + 2 * tried[q][1])
-    M, info = build(p, surface, f, on_panel=True)
+    M, info = build(p, surface, f, on_panel=True, k=k)
     if hand == "links":
         M = M.mirror([1, 0, 0])
     # fill under the plate where the stile is lower than the base (footprint not flat)
@@ -370,10 +372,16 @@ def mount_on_panel(p: Params, panel, hand, out_dir):
     if gap > 0.05:
         F = outline().extrude(gap + 0.2).translate([0, 0, -gap - 0.2]).scale([k, k, k])
         M += F.mirror([1, 0, 0]) if hand == "links" else F
-    a = p.angle
-    M = M.translate([0, -BOSS_Y * k, 0]).rotate([0, 0, a]).translate([at[0], at[1], z_base - 0.0])
-    info.update(hand=hand, at=at.tolist(), angle=a, z_base_mm=round(z_base, 3),
+    M = M.translate([0, -BOSS_Y * k, 0]).rotate([0, 0, angle]).translate([at[0], at[1], z_base - embed])
+    info.update(hand=hand, at=at.tolist(), angle=angle, z_base_mm=round(z_base, 3), embed_mm=embed,
                 footprint_unevenness_mm=round(float(hz.max() - hz.min()), 3), lever_len_search=tried)
+    return M, info
+
+
+def mount_on_panel(p: Params, panel, hand, out_dir):
+    """mount_lever at p.at / p.angle with k = scale_factor(p). Writes the handle in panel coordinates and
+    panel + handle as one STL."""
+    M, info = mount_lever(p, panel, parse_xy(p.at), hand, angle=p.angle)
     tm = mesh.manifold_to_trimesh(M)
     rep = check.report(tm, p.material)
     check.assert_printable(rep)

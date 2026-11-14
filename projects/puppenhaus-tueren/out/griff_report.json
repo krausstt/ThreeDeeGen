@@ -1,0 +1,232 @@
+{
+  "handle": {
+    "scale": "1:12",
+    "hand": "rechts",
+    "escutcheon_bbox_mm": [
+      -1.919,
+      -10.143,
+      1.919,
+      6.996
+    ],
+    "escutcheon_size_mm": [
+      3.84,
+      17.14
+    ],
+    "lever_len_mm": 10.67,
+    "projection_mm": 4.16,
+    "lever_top_mm": 4.062,
+    "key_dist_mm": 6.0,
+    "bbox_mm": [
+      -1.919,
+      -10.143,
+      0.0,
+      10.674,
+      6.996,
+      4.163
+    ],
+    "min_features_mm": {
+      "plate_t": 0.6,
+      "bevel": 0.3,
+      "screw_d": 0.8,
+      "keyhole_d": 0.9,
+      "keyhole_slot": 0.5,
+      "neck_d": 1.25,
+      "disc_d": 2.5,
+      "lever_w": 1.1,
+      "lever_t": 1.0,
+      "lever_tip_w": 0.76,
+      "web": 0.8
+    },
+    "web": {
+      "supports": 4,
+      "max_bridge_mm": 1.26,
+      "cantilever_mm": 0.0,
+      "web_area_mm2": 14.09,
+      "max_web_h_mm": 3.06,
+      "bridge_max_mm": 3.0
+    },
+    "overhang": {
+      "design_deg": 50.0,
+      "over45_mm2": 1.9592,
+      "bridge_mm2": 1.9592,
+      "over45_non_bridge_mm2": 0.0,
+      "flattest_non_bridge_deg_to_horizontal": null
+    },
+    "volume_mm3": 57.98
+  },
+  "details_ok": {
+    "plate": true,
+    "screw": true,
+    "keyhole": true,
+    "neck": true,
+    "lever_w": true,
+    "lever_t": true,
+    "web": true,
+    "bridge": true,
+    "cantilever": true,
+    "overhang": true
+  },
+  "parts": {
+    "griff_rechts": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 56336,
+      "bbox_mm": [
+        12.59,
+        17.14,
+        4.16
+      ],
+      "volume_cm3": 0.058,
+      "material": "PLA",
+      "mass_g_at_100pct": 0.1,
+      "overhang_area_gt45deg_pct": 0.906,
+      "overhang_area_gt60deg_pct": 0.906,
+      "overhang_area_gt45deg_mm2": 2.0,
+      "handle": {
+        "scale": "1:12",
+        "hand": "rechts",
+        "escutcheon_bbox_mm": [
+          -1.919,
+          -10.143,
+          1.919,
+          6.996
+        ],
+        "escutcheon_size_mm": [
+          3.84,
+          17.14
+        ],
+        "lever_len_mm": 10.67,
+        "projection_mm": 4.16,
+        "lever_top_mm": 4.062,
+        "key_dist_mm": 6.0,
+        "bbox_mm": [
+          -1.919,
+          -10.143,
+          0.0,
+          10.674,
+          6.996,
+          4.163
+        ],
+        "min_features_mm": {
+          "plate_t": 0.6,
+          "bevel": 0.3,
+          "screw_d": 0.8,
+          "keyhole_d": 0.9,
+          "keyhole_slot": 0.5,
+          "neck_d": 1.25,
+          "disc_d": 2.5,
+          "lever_w": 1.1,
+          "lever_t": 1.0,
+          "lever_tip_w": 0.76,
+          "web": 0.8
+        },
+        "web": {
+          "supports": 4,
+          "max_bridge_mm": 1.26,
+          "cantilever_mm": 0.0,
+          "web_area_mm2": 14.09,
+          "max_web_h_mm": 3.06,
+          "bridge_max_mm": 3.0
+        },
+        "overhang": {
+          "design_deg": 50.0,
+          "over45_mm2": 1.9592,
+          "bridge_mm2": 1.9592,
+          "over45_non_bridge_mm2": 0.0,
+          "flattest_non_bridge_deg_to_horizontal": null
+        },
+        "volume_mm3": 57.98
+      }
+    },
+    "griff_links": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 56336,
+      "bbox_mm": [
+        12.59,
+        17.14,
+        4.16
+      ],
+      "volume_cm3": 0.058,
+      "material": "PLA",
+      "mass_g_at_100pct": 0.1,
+      "overhang_area_gt45deg_pct": 0.906,
+      "overhang_area_gt60deg_pct": 0.906,
+      "overhang_area_gt45deg_mm2": 2.0,
+      "handle": {
+        "scale": "1:12",
+        "hand": "links",
+        "escutcheon_bbox_mm": [
+          -1.919,
+          -10.143,
+          1.919,
+          6.996
+        ],
+        "escutcheon_size_mm": [
+          3.84,
+          17.14
+        ],
+        "lever_len_mm": 10.67,
+        "projection_mm": 4.16,
+        "lever_top_mm": 4.062,
+        "key_dist_mm": 6.0,
+        "bbox_mm": [
+          -10.674,
+          -10.143,
+          0.0,
+          1.919,
+          6.996,
+          4.163
+        ],
+        "min_features_mm": {
+          "plate_t": 0.6,
+          "bevel": 0.3,
+          "screw_d": 0.8,
+          "keyhole_d": 0.9,
+          "keyhole_slot": 0.5,
+          "neck_d": 1.25,
+          "disc_d": 2.5,
+          "lever_w": 1.1,
+          "lever_t": 1.0,
+          "lever_tip_w": 0.76,
+          "web": 0.8
+        },
+        "web": {
+          "supports": 4,
+          "max_bridge_mm": 1.26,
+          "cantilever_mm": 0.0,
+          "web_area_mm2": 14.09,
+          "max_web_h_mm": 3.06,
+          "bridge_max_mm": 3.0
+        },
+        "overhang": {
+          "design_deg": 50.0,
+          "over45_mm2": 1.9592,
+          "bridge_mm2": 1.9592,
+          "over45_non_bridge_mm2": 0.0,
+          "flattest_non_bridge_deg_to_horizontal": null
+        },
+        "volume_mm3": 57.98
+      }
+    },
+    "griff_probe": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 112688,
+      "bbox_mm": [
+        30.0,
+        30.0,
+        5.31
+      ],
+      "volume_cm3": 1.182,
+      "material": "PLA",
+      "mass_g_at_100pct": 1.5,
+      "overhang_area_gt45deg_pct": 0.18,
+      "overhang_area_gt60deg_pct": 0.18,
+      "overhang_area_gt45deg_mm2": 3.9
+    }
+  }
+}

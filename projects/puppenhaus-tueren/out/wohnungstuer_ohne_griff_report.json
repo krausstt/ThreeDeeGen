@@ -1,0 +1,144 @@
+{
+  "parts": {
+    "wohnungstuer_ohne_griff": {
+      "watertight": true,
+      "winding_consistent": true,
+      "bodies": 1,
+      "faces": 1670,
+      "bbox_mm": [
+        82.08,
+        175.83,
+        3.92
+      ],
+      "volume_cm3": 47.675,
+      "material": "PLA",
+      "mass_g_at_100pct": 59.1,
+      "overhang_area_gt45deg_pct": 0.0,
+      "overhang_area_gt60deg_pct": 0.0,
+      "overhang_area_gt45deg_mm2": 0.0
+    }
+  },
+  "door": {
+    "kind": "wohnungstuer",
+    "scale": "1:12",
+    "real_leaf_mm": [
+      985.0,
+      2110.0
+    ],
+    "print_size_mm": [
+      82.08,
+      175.83,
+      3.92
+    ],
+    "bed_fit": {
+      "bed": 180.0,
+      "margin_req": 2.0,
+      "fits": true,
+      "margin_long_side": 2.08
+    },
+    "handle": {
+      "x": 5.416666666666667,
+      "y": 83.33333333333333,
+      "z": 3.3,
+      "lever_dir": 1,
+      "lock_edge": "links (x=0)",
+      "hinge_side": "rechts (+x)",
+      "note": "Hebel zeigt zur Bandseite (+x) wie in allen Fotos; Achse senkrecht zur T\u00fcrfl\u00e4che (+z)",
+      "keepout": [
+        3.1250000000000004,
+        68.75,
+        7.708333333333334,
+        90.41666666666666
+      ],
+      "keepout_free": true,
+      "keepout_clash": []
+    },
+    "features": [
+      {
+        "name": "spion",
+        "center": [
+          41.041666666666664,
+          133.33333333333334
+        ],
+        "d": 2.1666666666666665,
+        "ring_wall": 0.55,
+        "top": 3.75,
+        "color": "steel",
+        "bbox": [
+          39.95833333333333,
+          132.25,
+          42.125,
+          134.41666666666669
+        ]
+      },
+      {
+        "name": "briefeinwurf",
+        "bbox": [
+          29.375,
+          46.25,
+          52.70833333333333,
+          52.5
+        ],
+        "top": 3.8,
+        "color": "steel",
+        "flap": [
+          31.375,
+          47.166666666666664,
+          50.70833333333333,
+          51.583333333333336
+        ],
+        "min_border": 0.9166666666666666
+      }
+    ]
+  },
+  "spec": {
+    "kind": "wohnungstuer",
+    "scale": 12.0,
+    "leaf_w": 985.0,
+    "leaf_h": 2110.0,
+    "slab_t_p": 3.3,
+    "edge": "rund",
+    "edge_p": 0.3,
+    "handle_h": 1000.0,
+    "handle_x": 65.0,
+    "esc_w": 55.0,
+    "esc_up": 85.0,
+    "esc_down": 175.0,
+    "spion": true,
+    "spion_h": 1600.0,
+    "spion_d": 26.0,
+    "spion_ring_h_p": 0.45,
+    "slot": true,
+    "slot_w": 280.0,
+    "slot_h": 75.0,
+    "slot_bottom": 555.0,
+    "slot_side": 24.0,
+    "slot_tb": 11.0,
+    "slot_t_p": 0.5,
+    "vent": false,
+    "vent_w": 380.0,
+    "vent_h": 110.0,
+    "vent_bottom": 85.0,
+    "vent_frame": 12.0,
+    "vent_louvres": 7,
+    "vent_frame_h_p": 0.45,
+    "glass": "",
+    "bead_w_out": 570.0,
+    "bead_h_out": 1490.0,
+    "bead_bottom": 375.0,
+    "bead_w": 20.0,
+    "bead_h_p": 0.6,
+    "glass_recess_p": 0.3,
+    "orn_pp_p": 0.25,
+    "orn_sigma_p": 0.35,
+    "orn_dx_p": 0.2,
+    "orn_seed": 7,
+    "acetate_t_p": 0.5,
+    "frame_insert_p": 0.6,
+    "frame_clear_p": 0.15,
+    "material": "PLA",
+    "bed": 180.0,
+    "bed_margin": 2.0
+  },
+  "assembly_check": null
+}
