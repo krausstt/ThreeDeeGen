@@ -95,8 +95,22 @@ def test_tuerklinke_louis(tmp_path):
     g = load("tuerklinke-louis")
     s = g.generate(g.Params(voxel=0.08), tmp_path, previews=False)
     assert all(s["details_ok"].values())
-    for rep in list(s["parts"].values()) + [s["probe"]]:
+    for rep in list(s["parts"].values()) + [s["probe"]] + list(s["knobs"].values()):
         assert rep["watertight"] and rep["bodies"] == 1
-        assert rep["overhang_area_gt45deg_mm2"] < 5
+        assert rep["overhang_area_gt45deg_mm2"] < 8      # = lever underside over the <= 3 mm bridges
+    for rep in s["knobs"].values():
+        assert rep["knob"]["bulb_underside_deg"] >= 45
     with pytest.raises(AssertionError):                 # too small for a 0.4 mm nozzle
         g.generate(g.Params(size=0.6, voxel=0.08), tmp_path, previews=False)
+
+
+def test_tuerklinke_mount_on_panel(tmp_path):
+    g = load("tuerklinke-louis")
+    s = g.generate(g.Params(voxel=0.08, panel_stl="demo", at="4.2,38", lever_len=0, hand="rechts"), tmp_path,
+                   previews=False)
+    m = s["mounted"]["rechts"]
+    assert m["report"]["watertight"] and m["report"]["bodies"] == 1
+    info = m["info"]
+    assert abs(info["z_base_mm"] - 3.6) < 0.06                    # sits on the 3.6 mm stile
+    assert info["end_post_mm"] < 0.5 and info["max_bridge_mm"] <= 3.0
+    assert info["web_area_mm2"] < s["handle"]["web_area_mm2"]    # less web than free-standing on a flat door

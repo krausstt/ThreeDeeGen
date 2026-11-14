@@ -38,6 +38,12 @@ import manifold3d as m3  # noqa: E402
 from tdg import check, cli, mesh  # noqa: E402
 from tdg import sdf as S  # noqa: E402
 
+sys.path.insert(0, str(HERE))
+import trimesh  # noqa: E402
+
+import knob  # noqa: E402
+import mount  # noqa: E402
+
 CS = m3.CrossSection
 J = m3.JoinType.Round
 
@@ -56,6 +62,15 @@ class Params:
     nozzle: float = 0.4
     material: str = "PLA"
     voxel: float = 0.04           # SDF resolution of the lever
+    bridge_max: float = 3.0       # longest allowed bridge under the lever (mm), longer stretches get a web arch
+    # --- lever shape
+    lever_h: float = 3.4          # lever axis above the escutcheon base (reference units, was 5.0 in v1)
+    lever_len: float = 1.0        # stretch of the straight arm; 0 = optimise on the panel (with panel_stl)
+    # --- conforming mount on the real panel (optional)
+    panel_stl: str = ""           # panel STL from the slicer project ("demo" = synthetic test panel)
+    at: str = ""                  # "x,y": lever axis position in panel coordinates (mm)
+    angle: float = 0.0            # lever direction on the panel, degrees (0 = +x)
+    knob_at: str = ""             # "x,y": knob centre in panel coordinates (mm)
 
 
 # ------------------------------------------------------------------ 2D helpers
@@ -171,12 +186,24 @@ def escutcheon():
 
 
 # ------------------------------------------------------------------ lever (bec de cane with a scroll end)
-LEVER = [  # x, y (relative to the boss), z, radius
-    (0.00, 0.00, 0.60, 0.95), (0.00, 0.00, 2.00, 0.85), (0.00, 0.00, 3.90, 0.85), (0.25, 0.00, 4.60, 0.80),
-    (0.90, 0.10, 4.95, 0.75), (2.20, 0.20, 5.05, 0.70), (4.00, 0.25, 5.05, 0.68), (6.00, 0.10, 4.95, 0.70),
-    (7.80, -0.25, 4.80, 0.80), (9.30, -0.70, 4.65, 0.88), (10.30, -1.35, 4.50, 0.82), (10.80, -2.20, 4.40, 0.72),
-    (10.65, -3.05, 4.30, 0.62), (10.00, -3.50, 4.25, 0.55), (9.35, -3.35, 4.20, 0.52)]
-KNOB = (9.10, -2.95, 4.20, 0.62)
+# arm template from the elbow on: x, y (relative to the boss), z relative to the lever axis height, radius
+ARM = [(0.25, 0.00, -0.40, 0.80), (0.90, 0.10, -0.05, 0.75), (2.20, 0.20, 0.05, 0.70), (4.00, 0.25, 0.05, 0.68),
+       (6.00, 0.10, -0.05, 0.70), (7.80, -0.25, -0.20, 0.80), (9.30, -0.70, -0.35, 0.88)]
+CURL = [(10.30, -1.35, -0.50, 0.82), (10.80, -2.20, -0.60, 0.72), (10.65, -3.05, -0.70, 0.62),
+        (10.00, -3.50, -0.75, 0.55), (9.35, -3.35, -0.80, 0.52)]
+KNOB = (9.10, -2.95, -0.80, 0.62)
+LEVER_H_MIN = 2.6       # neck must clear the rosette dome (top at 1.52) before the elbow
+
+
+def lever_points(axis, f=1.0):
+    """(neck + arm + curl points, knob) with absolute z for lever axis height `axis`; f stretches the straight
+    arm (the scroll keeps its shape and moves along)."""
+    neck = [(0.0, 0.0, 0.6, 0.95), (0.0, 0.0, 0.5 * (0.6 + axis - 1.1), 0.85), (0.0, 0.0, axis - 1.1, 0.85)]
+    arm = [(x if x <= 0.9 else 0.9 + (x - 0.9) * f, y, axis + dz, r) for x, y, dz, r in ARM]
+    shift = (f - 1) * (9.30 - 0.9)
+    curl = [(x + shift, y, axis + dz, r) for x, y, dz, r in CURL]
+    kn = (KNOB[0] + shift, KNOB[1], axis + KNOB[2], KNOB[3])
+    return neck + arm + curl, kn
 
 
 class Ball:
@@ -190,75 +217,109 @@ class Ball:
         return np.sqrt((X - self.c[0]) ** 2 + (Y - self.c[1]) ** 2 + (Z - self.c[2]) ** 2) - self.r
 
 
-def lever(voxel):
-    pts = [(x, y + BOSS_Y, z) for x, y, z, _ in LEVER]
-    rod = S.Rod(pts, [r for *_, r in LEVER])
-    knob = Ball((KNOB[0], KNOB[1] + BOSS_Y, KNOB[2]), KNOB[3])
+def lever(voxel, axis, f):
+    pts, kn = lever_points(axis, f)
+    rod = S.Rod([(x, y + BOSS_Y, z) for x, y, z, _ in pts], [r for *_, r in pts])
+    knob = Ball((kn[0], kn[1] + BOSS_Y, kn[2]), kn[3])
+    xs = [q[0] for q in pts]
     lo = np.array([-1.5, BOSS_Y - 5.0, -1.0 - 0.3 * voxel])     # bed cut at z = 0 closes the neck foot
-    hi = np.array([12.5, BOSS_Y + 1.6, 6.2])
+    hi = np.array([max(xs) + 1.5, BOSS_Y + 1.6, axis + 1.3])
     D, lo = S.evaluate([rod], [knob], lo, hi, voxel, 0.25)
     tm = mesh.simplify(S.to_mesh(D, lo, voxel, sit_on_bed=False), 0.003)
     M = mesh.trimesh_to_manifold(tm)
     M = max(M.decompose(), key=lambda q: q.volume())
-    # 45 deg collar at the neck foot (bottom cone = 45 deg, top cone back to the neck)
-    M += m3.Manifold.cylinder(0.35, 0.95, 1.3, 48).translate([0, BOSS_Y, 1.05])
-    M += m3.Manifold.cylinder(0.25, 1.3, 0.95, 48).translate([0, BOSS_Y, 1.4])
+    if axis >= 3.3:   # 45 deg collar above the rosette dome (bottom cone 45 deg, top cone back to the neck)
+        M += m3.Manifold.cylinder(0.3, 0.85, 1.15, 48).translate([0, BOSS_Y, 1.45])
+        M += m3.Manifold.cylinder(0.25, 1.15, 0.85, 48).translate([0, BOSS_Y, 1.75])
     return M
 
 
-def web(min_w=1.0, step=0.25, arch=(1.4, 8.4), arch_top=0.35):
-    """Vertical web under the lever arm, scroll and knob, from the door (z = 0) up to the lever's 45 deg points.
-    Under the straight arm it is opened by a pointed arch (45 deg flanks = support free), so only a bracket at
-    the neck and the curved wall under the scroll reach the door; above the arch apex `arch_top` mm remain."""
-    arm = np.array([(x, y + BOSS_Y, z, r) for x, y, z, r in LEVER[3:]] +
-                   [(KNOB[0], KNOB[1] + BOSS_Y, KNOB[2], KNOB[3])])
+def path_samples(axis, f, step=0.1):
+    """Lever path from the elbow to the knob, resampled: columns x, y (absolute, local), z, r, s."""
+    pts, kn = lever_points(axis, f)
+    arm = np.array([(x, y + BOSS_Y, z, r) for x, y, z, r in pts[3:]] + [(kn[0], kn[1] + BOSS_Y, kn[2], kn[3])])
     seg = np.linalg.norm(np.diff(arm[:, :2], axis=0), axis=1)
     s = np.concatenate([[0], np.cumsum(seg)])
-    t = np.unique(np.concatenate([np.linspace(0, s[-1], int(s[-1] / step) + 2), arch, arch]))
-    P = np.c_[[np.interp(t, s, arm[:, i]) for i in range(4)]].T
-    top = P[:, 2] - P[:, 3] / math.sqrt(2) + 0.08
-    sa, sb = arch
-    mid = (sa + sb) / 2
-    apex = np.interp(mid, t, top) - arch_top
-    inside = (t > sa + 1e-6) & (t < sb - 1e-6)
-    bot = np.where(inside, np.maximum(apex - np.abs(t - mid), 0.0), 0.0)
+    t = np.linspace(0, s[-1], int(s[-1] / step) + 2)
+    return np.c_[[np.interp(t, s, arm[:, i]) for i in range(4)] + [t]].T
+
+
+def escutcheon_height(xy):
+    """Top of the escutcheon (local), 0 outside: plate, rosette."""
+    from matplotlib.path import Path as MPath
+    o = MPath(outline().to_polygons()[0])
+    h = np.where(o.contains_points(xy), PLATE_T, 0.0)
+    return np.where(np.hypot(xy[:, 0], xy[:, 1] - BOSS_Y) < 1.6, PLATE_T + 0.4, h)
+
+
+def web_solution(axis, f, surface, bridge_max, step=0.1):
+    """surface(xy_local) -> panel height relative to the escutcheon base (local units); 0 = flat door."""
+    P = path_samples(axis, f, step)
+    L = P[:, 2] - P[:, 3] / math.sqrt(2) + 0.08
+    H = np.maximum(surface(P[:, :2]), escutcheon_height(P[:, :2]))
+    b, sup, met = mount.solve_web(P[:, 4], L, H, bridge_max=bridge_max)
+    return P, L, b, met
+
+
+def web(P, L, b, min_w=1.0, eps=0.02):
+    """Wall along the path from b(s) to L(s); 1.41 x lever radius wide (meets the lever at its 45 deg points)."""
     w = np.minimum(np.maximum(math.sqrt(2) * P[:, 3], min_w), 1.9 * P[:, 3])
     parts = []
-    for i in range(len(t) - 1):
-        if t[i] == t[i + 1]:
+    for i in range(len(P) - 1):
+        if b[i] >= L[i] - eps and b[i + 1] >= L[i + 1] - eps:
             continue
-        b0 = bot[i] if inside[i] or not inside[i + 1] else bot[i + 1]      # vertical arch jambs at sa / sb
-        b1 = bot[i + 1] if inside[i + 1] or not inside[i] else bot[i]
-        cyl = [m3.Manifold.cylinder(top[j] - b, w[j] / 2, w[j] / 2, 16).translate([P[j, 0], P[j, 1], b])
-               for j, b in ((i, b0), (i + 1, b1))]
+        cyl = [m3.Manifold.cylinder(max(L[j] - b[j], 0.02), w[j] / 2, w[j] / 2, 16).translate(
+            [P[j, 0], P[j, 1], min(b[j], L[j] - 0.02)]) for j in (i, i + 1)]
         parts.append(m3.Manifold.batch_hull(cyl))
-    info = dict(web_min=float(w.min()), arch_span=round(sb - sa, 2), arch_apex_z=round(float(apex), 2),
-                arch_flank_deg=45.0)
-    return m3.Manifold.batch_boolean(parts, m3.OpType.Add), info
+    if not parts:
+        return m3.Manifold(), float(w.min())
+    return m3.Manifold.batch_boolean(parts, m3.OpType.Add), float(w.min())
 
 
-def build(p: Params):
-    k = p.size * (p.door_panel_h / REAL["door_h"]) / 0.075        # reference model is drawn at 1:13.33
+def lever_axis(p, f, surface, sink=0.1, on_panel=False):
+    """Lever axis: free-standing at lever_h; on a panel as low as possible (LEVER_H_MIN) but resting on, not
+    cutting through, the relief under the arm (it sinks `sink` into the moulding and is carried by it)."""
+    P = path_samples(5.0, f)
+    dz = P[:, 2] - 5.0
+    need = surface(P[:, :2]) + P[:, 3] - sink - dz
+    return max(LEVER_H_MIN if on_panel else p.lever_h, LEVER_H_MIN, float(need.max()))
+
+
+def build(p: Params, surface=None, f=None, on_panel=False):
+    """Handle in local reference units scaled by k. surface: panel height relative to the base (local units)."""
+    k = scale_factor(p)
+    surface = surface or (lambda xy: np.zeros(len(xy)))
+    f = (p.lever_len if p.lever_len > 0 else 1.0) if f is None else f
+    axis = lever_axis(p, f, surface, on_panel=on_panel)
+    P, L, b, met = web_solution(axis, f, surface, p.bridge_max / k)
+    W, w_min = web(P, L, b)
     E, n_pearls = escutcheon()
-    W, winfo = web()
-    M = E + lever(p.voxel / max(k, 1e-6)) + W
+    M = E + lever(p.voxel / max(k, 1e-6), axis, f) + W
     M = M.scale([k, k, k])
-    b = M.bounding_box()
+    bb = M.bounding_box()
+    pts, _ = lever_points(axis, f)
     info = dict(scale_factor=round(k, 3), model_scale=f"1:{REAL['door_h'] / (p.door_panel_h * p.size):.1f}",
-                plate_mm=[round(5.6 * k, 2), round(22.0 * k, 2)], lever_len_mm=round(b[3], 2),
-                projection_mm=round(b[5], 2), lever_to_keyhole_mm=round((BOSS_Y - KEY_Y) * k, 2),
-                pearls=n_pearls, pearl_d_mm=round(2 * PEARL_R * k, 2), web_min_mm=round(winfo['web_min'] * k, 2),
-                web_arch_span_mm=round(winfo['arch_span'] * k, 2), web_arch_flank_deg=winfo['arch_flank_deg'],
-                lever_min_d_mm=round(2 * min(r for *_, r in LEVER) * k, 2),
+                plate_mm=[round(5.6 * k, 2), round(22.0 * k, 2)], lever_len_mm=round(bb[3], 2), lever_stretch=f,
+                lever_axis_mm=round(axis * k, 2), projection_mm=round(bb[5], 2),
+                lever_to_keyhole_mm=round((BOSS_Y - KEY_Y) * k, 2), pearls=n_pearls,
+                pearl_d_mm=round(2 * PEARL_R * k, 2), web_min_mm=round(w_min * k, 2),
+                web_supports=met["supports"], web_area_mm2=round(met["web_area"] * k * k, 2),
+                web_max_h_mm=round(met["max_web_h"] * k, 2), end_post_mm=round(met["end_post"] * k, 2),
+                max_bridge_mm=round(float(met["max_bridge"]) * k, 2),
+                lever_min_d_mm=round(2 * min(r for *_, r in pts) * k, 2),
                 keyhole_slot_min_mm=round(0.52 * k, 2), plate_t_mm=round(PLATE_T * k, 2))
     return M, info
+
+
+def scale_factor(p):
+    return p.size * (p.door_panel_h / REAL["door_h"]) / 0.075        # reference model is drawn at 1:13.33
 
 
 def details_ok(info, nozzle):
     """Smallest printable features with this nozzle (0.4: lines >= 0.45 mm, pearls >= 0.6 mm)."""
     return dict(web=info["web_min_mm"] >= 2.2 * nozzle, lever=info["lever_min_d_mm"] >= 2.4 * nozzle,
                 pearls=info["pearl_d_mm"] >= 1.5 * nozzle, keyhole=info["keyhole_slot_min_mm"] >= 1.1 * nozzle,
-                plate=info["plate_t_mm"] >= 1.5 * nozzle)
+                plate=info["plate_t_mm"] >= 1.5 * nozzle, bridge=info["max_bridge_mm"] <= 3.0 + 1e-6)
 
 
 def test_block(R, L, k):
@@ -269,12 +330,96 @@ def test_block(R, L, k):
     return blk + R.translate([-14 * k, 0, t - 0.1]) + L.translate([14 * k, 0, t - 0.1])
 
 
+# ------------------------------------------------------------------ conforming mount on a real panel
+def parse_xy(sv):
+    x, y = (float(v) for v in sv.split(","))
+    return np.array([x, y])
+
+
+def mount_on_panel(p: Params, panel, hand, out_dir):
+    """Sample the panel under the handle, sit the escutcheon on the stile, lay the lever on the moulding,
+    optionally pick the lever length (lever_len = 0) with the least visible web. Writes the handle in panel
+    coordinates and panel + handle as one STL."""
+    k = scale_factor(p)
+    sx = -1.0 if hand == "links" else 1.0
+    at = parse_xy(p.at)
+    to_panel = mount.placement(at, p.angle, k, (0.0, BOSS_Y))
+    win = to_panel(np.array([[-4.0, -12.0], [16.5, -12.0], [16.5, 12.0], [-4.0, 12.0]]) * [sx, 1])
+    hm = mount.HeightMap(panel, win.min(0) - 1, win.max(0) + 1)
+    # escutcheon footprint -> base height
+    from matplotlib.path import Path as MPath
+    gx, gy = np.meshgrid(np.arange(-3.0, 3.0, 0.15), np.arange(-11.2, 11.2, 0.15))
+    g = np.c_[gx.ravel(), gy.ravel()]
+    g = g[MPath(outline().to_polygons()[0]).contains_points(g)]
+    hz = hm(to_panel(g * [sx, 1]))
+    z_base = float(np.percentile(hz, 98))
+    surface = lambda xy: (hm(to_panel(np.atleast_2d(xy) * [sx, 1])) - z_base) / k        # noqa: E731
+    f = p.lever_len
+    tried = {}
+    if f <= 0:                                  # optimise the lever length: least web, then shortest end post
+        for fc in np.round(np.linspace(0.8, 1.2, 9), 3):
+            ax_ = lever_axis(p, fc, surface, on_panel=True)
+            _, _, _, met = web_solution(ax_, fc, surface, p.bridge_max / k, step=0.15)
+            tried[float(fc)] = (round(met["web_area"] * k * k, 2), round(met["end_post"] * k, 2))
+        f = min(tried, key=lambda q: tried[q][0] + 2 * tried[q][1])
+    M, info = build(p, surface, f, on_panel=True)
+    if hand == "links":
+        M = M.mirror([1, 0, 0])
+    # fill under the plate where the stile is lower than the base (footprint not flat)
+    gap = (z_base - float(hz.min())) / k
+    if gap > 0.05:
+        F = outline().extrude(gap + 0.2).translate([0, 0, -gap - 0.2]).scale([k, k, k])
+        M += F.mirror([1, 0, 0]) if hand == "links" else F
+    a = p.angle
+    M = M.translate([0, -BOSS_Y * k, 0]).rotate([0, 0, a]).translate([at[0], at[1], z_base - 0.0])
+    info.update(hand=hand, at=at.tolist(), angle=a, z_base_mm=round(z_base, 3),
+                footprint_unevenness_mm=round(float(hz.max() - hz.min()), 3), lever_len_search=tried)
+    tm = mesh.manifold_to_trimesh(M)
+    rep = check.report(tm, p.material)
+    check.assert_printable(rep)
+    base = out_dir / f"tuerklinke_louis_{hand}_montiert"
+    mesh.export(tm, str(base), formats=("stl",))
+    combo = trimesh.util.concatenate([panel, tm])
+    combo.export(str(out_dir / f"panel_mit_klinke_{hand}.stl"))
+    return tm, info, rep
+
+
+def knobs(p: Params, out_dir, panel=None):
+    """Both knob variants at the origin; with panel + knob_at also placed on the sampled panel surface."""
+    k = scale_factor(p)
+    reps = {}
+    for v in ("olive", "melon"):
+        M, info = knob.knob(v)
+        M = M.scale([k, k, k])
+        assert info["bulb_underside_deg"] >= 45, info
+        tm = mesh.manifold_to_trimesh(M)
+        rep = check.report(tm, p.material, extra=dict(knob=info))
+        check.assert_printable(rep)
+        mesh.export(tm, str(out_dir / f"tuerknauf_{v}"))
+        if panel is not None and p.knob_at:
+            at = parse_xy(p.knob_at)
+            r = knob.ROSETTE_R * k
+            hm = mount.HeightMap(panel, at - r - 1, at + r + 1)
+            ang = np.linspace(0, 2 * np.pi, 48)
+            ring = np.r_[[at], at + np.c_[np.cos(ang), np.sin(ang)] * r, at + np.c_[np.cos(ang), np.sin(ang)] * r / 2]
+            z = hm(ring)
+            z_base = float(np.percentile(z, 98))
+            info.update(at=at.tolist(), z_base_mm=round(z_base, 3), footprint_unevenness_mm=round(float(np.ptp(z)), 3))
+            if np.ptp(z) > 0.05:          # fill down to the lowest point under the rosette
+                M += m3.Manifold.cylinder(np.ptp(z) + 0.2, r, r, 96).translate([0, 0, -np.ptp(z) - 0.2])
+            mesh.export(mesh.manifold_to_trimesh(M.translate([at[0], at[1], z_base])),
+                        str(out_dir / f"tuerknauf_{v}_montiert"), formats=("stl",))
+        reps[v] = rep
+    return reps
+
+
 def generate(p: Params, out_dir: Path, previews=True):
     R, info = build(p)
     ok = details_ok(info, p.nozzle)
     assert all(ok.values()), f"details too small for a {p.nozzle} mm nozzle at size {p.size}: {ok} {info}"
     L = R.mirror([1, 0, 0])
-    parts = {"rechts": R, "links": L} if p.hand == "both" else {p.hand: R if p.hand == "rechts" else L}
+    hands = ("rechts", "links") if p.hand == "both" else (p.hand,)
+    parts = {h: (R if h == "rechts" else L) for h in hands}
     reps = {}
     for name, M in parts.items():
         tm = mesh.manifold_to_trimesh(M)
@@ -288,12 +433,25 @@ def generate(p: Params, out_dir: Path, previews=True):
     mesh.export(T, str(out_dir / "tuerklinke_louis_probe"), formats=("3mf",))
     rep_t = check.report(T, p.material)
     check.assert_printable(rep_t)
-    summary = dict(params=asdict(p), handle=info, details_ok=ok, parts=reps, probe=rep_t)
+    panel = None
+    mounted = {}
+    if p.panel_stl:
+        panel = mount.demo_panel() if p.panel_stl == "demo" else trimesh.load(p.panel_stl, force="mesh")
+        assert p.at, "--at x,y (lever axis on the panel) is required with --panel-stl"
+        for h in (hands if p.hand != "both" else ("rechts",)):     # one position = one hand
+            _, minfo, mrep = mount_on_panel(p, panel, h, out_dir)
+            mounted[h] = dict(info=minfo, report=mrep)
+    kn = knobs(p, out_dir, panel)
+    summary = dict(params=asdict(p), handle=info, details_ok=ok, parts=reps, probe=rep_t, mounted=mounted,
+                   knobs=kn)
     check.write(summary, str(out_dir / "tuerklinke_louis_report.json"))
     if previews and "rechts" in parts:
-        sys.path.insert(0, str(HERE))
         import preview
         preview.main(out_dir / "tuerklinke_louis_rechts.stl", out_dir / "tuerklinke_louis_overview.png")
+        preview.knobs(out_dir)
+        if "rechts" in mounted:
+            preview.mounted(out_dir / "panel_mit_klinke_rechts.stl", mounted["rechts"]["info"]["at"],
+                            out_dir / "tuerklinke_louis_montage.png")
     return summary
 
 
@@ -303,6 +461,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     s = generate(cli.params_from(a, Params), out)
     print(s["handle"], {k: (v["bbox_mm"], v["overhang_area_gt45deg_mm2"]) for k, v in s["parts"].items()})
+    for h, m in s["mounted"].items():
+        print(h, {k: m["info"][k] for k in ("z_base_mm", "lever_axis_mm", "lever_stretch", "web_area_mm2",
+                                              "end_post_mm", "max_bridge_mm", "footprint_unevenness_mm")})
 
 
 if __name__ == "__main__":
